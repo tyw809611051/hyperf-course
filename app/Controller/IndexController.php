@@ -11,8 +11,13 @@ declare(strict_types=1);
  */
 namespace App\Controller;
 
+use Hyperf\HttpServer\Annotation\AutoController;
+
 class IndexController extends AbstractController
 {
+    /*
+     * @AutoController
+     * */
     public function index()
     {
         $user = $this->request->input('user', 'Hyperf');
