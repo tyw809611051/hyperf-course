@@ -17,6 +17,6 @@ Router::get('/favicon.ico', function () {
     return '';
 });
 
-Router::get('hello-hyperf', function() {
+Router::get('/hello-hyperf', function() {
 	return 'Hello Hyperf.';
 });
