@@ -12,7 +12,6 @@ declare(strict_types=1);
 use Hyperf\Server\Event;
 use Hyperf\Server\Server;
 use Swoole\Constant;
-use Hyperf\Server\SwooleEvent;
 
 return [
     'mode' => SWOOLE_PROCESS,
@@ -60,7 +59,7 @@ return [
         Event::ON_TASK => [Hyperf\Framework\Bootstrap\TaskCallback::class, 'onTask'],
         Event::ON_FINISH => [Hyperf\Framework\Bootstrap\FinishCallback::class, 'onFinish'],
         // Task callbacks
-        SwooleEvent::ON_TASK         => [Hyperf\Framework\Bootstrap\TaskCallback::class, 'onTask'],
-        SwooleEvent::ON_FINISH       => [Hyperf\Framework\Bootstrap\FinishCallback::class, 'onFinish'],
+//        SwooleEvent::ON_TASK         => [Hyperf\Framework\Bootstrap\TaskCallback::class, 'onTask'],
+//        SwooleEvent::ON_FINISH       => [Hyperf\Framework\Bootstrap\FinishCallback::class, 'onFinish'],
     ],
 ];
