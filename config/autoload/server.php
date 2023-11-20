@@ -12,6 +12,7 @@ declare(strict_types=1);
 use Hyperf\Server\Event;
 use Hyperf\Server\Server;
 use Swoole\Constant;
+use Hyperf\Server\SwooleEvent;
 
 return [
     'mode' => SWOOLE_PROCESS,
