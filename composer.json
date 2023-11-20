@@ -26,6 +26,7 @@
         "hyperf/memory": "~3.0.0",
         "hyperf/process": "~3.0.0",
         "hyperf/redis": "~3.0.0",
+        "hyperf/task": "*",
         "hyperf/view": "^3.0",
         "hyperf/view-engine": "*"
     },
