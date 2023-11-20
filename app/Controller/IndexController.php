@@ -26,10 +26,11 @@ class IndexController extends AbstractController
         $user = $this->request->input('user', 'Hyperf');
         $method = $this->request->getMethod();
 
-        return [
-            'method' => $method,
-            'message' => "Hello {$user}.",
-        ];
+        return $this->view->render('index',['name' => $user]);
+//        return [
+//            'method' => $method,
+//            'message' => "Hello {$user}.",
+//        ];
     }
 
    // 在参数上通过定义 RequestInterface 和 ResponseInterface 来获取相关对象，对象会被依赖注入容器自动注入
