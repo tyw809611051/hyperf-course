@@ -12,3 +12,6 @@ vendor/
 .phpunit*
 *.cache
 .vscode/
+.composer.lock
+.htaccess
+nginx.htaccess
