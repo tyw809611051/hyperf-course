@@ -36,7 +36,7 @@ class IndexController extends AbstractController
     public function course(RequestInterface $request, RenderInterface $render)
     {
         $target = $request->input('target', 'World');
-        return $render->render('index', ['name' => $target]);
+        return $render->render('index');
 //        return [
 //            'method' => $target,
 //            'message' => "Hello {$target}.",

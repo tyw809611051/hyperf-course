@@ -5,6 +5,6 @@
     <title>Hyperf</title>
 </head>
 <body>
-Hello, {{$name}} You are using blade template now.
+Hello You are using blade template now.
 </body>
 </html>
