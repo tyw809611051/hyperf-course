@@ -21,12 +21,13 @@ class IndexController extends AbstractController
     /*
      * @AutoController
      * */
+    #[\ReturnTypeWillChange]
     public function index(RenderInterface $render)
     {
         $user = $this->request->input('user', 'Hyperf');
         $method = $this->request->getMethod();
 
-        $render->render('index');
+        return $render->render('index');
 //        return $this->view->render('index',['name' => $user]);
 //        return [
 //            'method' => $method,
