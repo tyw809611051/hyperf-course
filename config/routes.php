@@ -20,3 +20,4 @@ use Hyperf\HttpServer\Router\Router;
 //Router::get('/hello-hyperf', function() {
 //	return 'Hello Hyperf.';
 //});
+Router::get('/course','App\Controller\IndexController@course');

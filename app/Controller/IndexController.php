@@ -12,6 +12,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Hyperf\HttpServer\Annotation\AutoController;
+use Hyperf\HttpServer\Contract\RequestInterface;
+use Hyperf\HttpServer\Contract\ResponseInterface;
 
 class IndexController extends AbstractController
 {
@@ -28,4 +30,12 @@ class IndexController extends AbstractController
             'message' => "Hello {$user}.",
         ];
     }
+
+   // 在参数上通过定义 RequestInterface 和 ResponseInterface 来获取相关对象，对象会被依赖注入容器自动注入
+    public function course(RequestInterface $request, ResponseInterface $response)
+    {
+        $target = $request->input('target', 'World');
+        return 'Hello ' . $target;
+    }
+
 }
