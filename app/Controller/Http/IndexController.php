@@ -14,7 +14,6 @@ namespace App\Controller\Http;
 
 use App\Controller\AbstractController;
 use Hyperf\HttpServer\Annotation\AutoController;
-use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\RequestMapping;
 
 #[AutoController(prefix: "index")]
