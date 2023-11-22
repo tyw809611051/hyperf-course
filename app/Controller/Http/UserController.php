@@ -14,12 +14,23 @@ namespace App\Controller\Http;
 
 use App\Controller\AbstractController;
 use App\Service\UserService;
+use Hyperf\Di\Annotation\Inject;
+use Hyperf\HttpMessage\Cookie\Cookie;
 use Hyperf\HttpServer\Annotation\AutoController;
 use Hyperf\HttpServer\Annotation\RequestMapping;
+use Hyperf\Validation\Contract\ValidatorFactoryInterface;
+use Phper666\JWTAuth\JWT;
+use function App\Helper\jsonSuccess;
 
 #[AutoController(prefix: "user")]
 class UserController extends AbstractController
 {
+
+    #[Inject]
+    private JWT $jwt;
+
+    #[Inject]
+    protected ValidatorFactoryInterface $validationFactory;
 
     /**
      * 登录
@@ -35,6 +46,12 @@ class UserController extends AbstractController
             'uid'=>$user->id,
             'username'=>$user->email,
         ];
-//        $token =
+        $token = $this->jwt->getToken($auth);
+        return $this->response
+            ->withCookie(new Cookie('IM_TOKEN', (string)$token, time() + $this->jwt->getTTL(), '/', '', false, false))
+            ->json(jsonSuccess([
+                'token'=>$token,
+                'uid'=>$user->id,
+            ]));
     }
 }

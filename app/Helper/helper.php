@@ -392,3 +392,28 @@ if (!function_exists('wsError')) {
     }
 }
 
+if (!function_exists('jsonSuccess')) {
+    function jsonSuccess($data = [], $code = 0, $msg = 'success')
+    {
+        $result = [
+            'data'   => $data,
+            'code' => $code,
+            'msg'    => $msg,
+        ];
+
+        return $result;
+    }
+}
+
+if (!function_exists('jsonError')) {
+    function jsonError($code, $msg = 'error', $data=[])
+    {
+        $result = [
+            'data'  => $data,
+            'msg'  => $msg,
+            'code' => $code
+        ];
+        return $result;
+    }
+}
+

@@ -29,6 +29,7 @@
         "hyperf/process": "~3.0.0",
         "hyperf/redis": "~3.0.0",
         "hyperf/task": "*",
+        "hyperf/validation": "*",
         "hyperf/view": "^3.0",
         "hyperf/view-engine": "*",
         "phper666/jwt-auth": "^4.0"
@@ -81,14 +82,18 @@
             "php ./bin/hyperf.php start"
         ]
     },
-    "repositories": [
-        {
+    "repositories": {
+        "packagist": {
             "type": "composer",
             "url": "https://mirrors.aliyun.com/composer/"
         },
-        {
+        "0": {
+            "type": "composer",
+            "url": "https://mirrors.aliyun.com/composer/"
+        },
+        "1": {
             "type": "composer",
             "url": "https://mirrors.cloud.tencent.com/composer/"
         }
-    ]
+    }
 }
