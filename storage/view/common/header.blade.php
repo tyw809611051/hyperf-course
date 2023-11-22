@@ -3,6 +3,6 @@
     <meta charset="UTF-8">
     <title>{{ $title }}</title>
     <meta name="keywords" content="hyperf-im,chat,layim,hyperf,im,即时通讯,聊天室,"/>
-    <link rel="stylesheet" href="https://www.evanetang.com/public/layim/css/layui.css" type="text/css">
-    <script src="layim/layui.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="/public/layim/css/layui.css" type="text/css">
+    <script src="/public/layim/layui.js" type="text/javascript"></script>
 </header>
