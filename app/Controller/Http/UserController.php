@@ -13,6 +13,7 @@ declare(strict_types = 1);
 namespace App\Controller\Http;
 
 use App\Controller\AbstractController;
+use App\Service\UserService;
 use Hyperf\HttpServer\Annotation\AutoController;
 use Hyperf\HttpServer\Annotation\RequestMapping;
 
@@ -28,7 +29,12 @@ class UserController extends AbstractController
     public function login()
     {
         $email = $this->request->input('email');
-        $pwd   = $this->request->input('password');
-
+        $password   = $this->request->input('password');
+        $user  = UserService::login($email,$password);
+        $auth = [
+            'uid'=>$user->id,
+            'username'=>$user->email,
+        ];
+//        $token =
     }
 }

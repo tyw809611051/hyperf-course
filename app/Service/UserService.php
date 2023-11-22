@@ -12,11 +12,33 @@ declare(strict_types = 1);
 
 namespace App\Service;
 
+use App\Constants\ErrorCode;
+use App\Exception\ApiException;
 use App\Model\User;
+use App\Model\UserLoginLog;
+use function App\Helper\getClientIp;
 
 
 class UserService
 {
+    /**
+     * @param int $uid
+     *
+     * @return bool
+     * */
+    public static function userLoginLog(int $uid) :bool
+    {
+        return UserLoginLog::query()->insert([
+            'uid'=>$uid,
+            'user_login_ip'=>getClientIp(),
+        ]);
+    }
+
+    /**
+     * @param string $email
+     *
+     * @return null|\App\Model\User|\Hyperf\Database\Model\Builder|\Hyperf\Database\Model\Model|object
+     */
     public static function findUserByEmail(string $email)
     {
         return User::query()->where('email','=',$email)->first() ?? NULL;
@@ -31,9 +53,15 @@ class UserService
     public static function login(string $email, string $password) :User
     {
 
-       return self::findUserByEmail($email);
-//        if (!$user || $user['delete_at'] !== NULL) {
-//
-//        }
+        $user = self::findUserByEmail($email);
+        if (!$user || $user['delete_at'] !== NULL) {
+            throw new ApiException(ErrorCode::USER_NOT_FOUND);
+        }
+        if (!password_verify($password,$user['password'])) {
+            throw new ApiException(ErrorCode::USER_PASSWORD_ERROR);
+        }
+
+        self::userLoginLog($user['id']);
+        return $user;
     }
 }
