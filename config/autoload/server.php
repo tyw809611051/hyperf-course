@@ -43,7 +43,7 @@ return [
         Constant::OPTION_BUFFER_OUTPUT_SIZE => 2 * 1024 * 1024,
 
         // 静态资源
-        'document_root'         => BASE_PATH . '/public',
+        'document_root'         => BASE_PATH . '/public/',
         'enable_static_handler' => true,
         // Task Worker 数量，根据您的服务器配置而配置适当的数量
         'task_worker_num' => swoole_cpu_num(),
