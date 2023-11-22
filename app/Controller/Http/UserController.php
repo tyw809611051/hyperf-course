@@ -20,9 +20,9 @@ use Hyperf\HttpServer\Annotation\AutoController;
 use Hyperf\HttpServer\Annotation\RequestMapping;
 use Hyperf\Validation\Contract\ValidatorFactoryInterface;
 use Phper666\JWTAuth\JWT;
-//use function App\Helper\jsonError;
-//use function App\Helper\jsonSuccess;
-use App\Helper;
+use function App\Helper\getRandStr;
+use function App\Helper\jsonError;
+use function App\Helper\jsonSuccess;
 
 #[AutoController(prefix: "user")]
 class UserController extends AbstractController
@@ -43,7 +43,7 @@ class UserController extends AbstractController
     {
         $email = $this->request->input('email');
         $password   = $this->request->input('password');
-        $data = jsonSuccess();
+        $data = getRandStr();
         return $this->response->json($data);
         try {
             $user  = UserService::login($email,$password);
