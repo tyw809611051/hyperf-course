@@ -19,10 +19,11 @@ use Hyperf\HttpServer\Annotation\RequestMapping;
 /**
  * Class IndexController
  * @package App\Controller
- * @Controller(prefix="/index")
+ * @Controller(prefix="index")
  */
 class IndexController extends AbstractController
 {
+
     /**
      * @RequestMapping(path="login",methods="GET")
      */
