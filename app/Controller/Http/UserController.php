@@ -20,8 +20,9 @@ use Hyperf\HttpServer\Annotation\AutoController;
 use Hyperf\HttpServer\Annotation\RequestMapping;
 use Hyperf\Validation\Contract\ValidatorFactoryInterface;
 use Phper666\JWTAuth\JWT;
-use function App\Helper\jsonError;
-use function App\Helper\jsonSuccess;
+//use function App\Helper\jsonError;
+//use function App\Helper\jsonSuccess;
+use App\Helper;
 
 #[AutoController(prefix: "user")]
 class UserController extends AbstractController
