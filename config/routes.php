@@ -11,13 +11,5 @@ declare(strict_types=1);
  */
 use Hyperf\HttpServer\Router\Router;
 
-Router::addRoute(['GET', 'POST', 'HEAD'], '/', 'App\Controller\IndexController@index');
-//
-//Router::get('/favicon.ico', function () {
-//    return '';
-//});
-//
-//Router::get('/hello-hyperf', function() {
-//	return 'Hello Hyperf.';
-//});
-Router::get('/course','App\Controller\IndexController@course');
+Router::addRoute(['GET', 'POST', 'HEAD'], '/', 'App\Controller\Http\HomeController@index');
+
