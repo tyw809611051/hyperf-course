@@ -56,7 +56,7 @@ class UserController extends AbstractController
                     'uid'=>$user->id,
                 ]));
         } catch (\Exception $e) {
-            return $this->response->json($e->getMessage());
+            return $this->response->json($e->getCode());
         }
 
     }
