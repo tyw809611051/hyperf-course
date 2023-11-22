@@ -60,7 +60,7 @@
 
 <script type="module">
   import {user_login, user_home} from 'chat/js/api.js';
-  import {postRequest} from 'chat/js/request.js';
+  import {postRequest} from '/chat/js/request.js';
 
   layui.use(['form', 'layer', 'jquery'], function(){
     var form = layui.form;
