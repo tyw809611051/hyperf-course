@@ -13,20 +13,15 @@ declare(strict_types = 1);
 namespace App\Controller\Http;
 
 use App\Controller\AbstractController;
+use Hyperf\HttpServer\Annotation\AutoController;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\RequestMapping;
 
-/**
- * Class IndexController
- * @package App\Controller
- * @Controller(prefix="index")
- */
+#[AutoController(prefix: "index")]
 class IndexController extends AbstractController
 {
 
-    /**
-     * @RequestMapping(path="login",methods="GET")
-     */
+    #[RequestMapping(path: "login",methods: "get")]
     public function login()
     {
         return $this->view->render('user/login');
