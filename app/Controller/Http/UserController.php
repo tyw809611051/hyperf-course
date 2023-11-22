@@ -20,6 +20,7 @@ use Hyperf\HttpServer\Annotation\AutoController;
 use Hyperf\HttpServer\Annotation\RequestMapping;
 use Hyperf\Validation\Contract\ValidatorFactoryInterface;
 use Phper666\JWTAuth\JWT;
+use function App\Helper\jsonError;
 use function App\Helper\jsonSuccess;
 
 #[AutoController(prefix: "user")]
@@ -41,17 +42,22 @@ class UserController extends AbstractController
     {
         $email = $this->request->input('email');
         $password   = $this->request->input('password');
-        $user  = UserService::login($email,$password);
-        $auth = [
-            'uid'=>$user->id,
-            'username'=>$user->email,
-        ];
-        $token = $this->jwt->getToken($auth);
-        return $this->response
-            ->withCookie(new Cookie('IM_TOKEN', (string)$token, time() + $this->jwt->getTTL(), '/', '', false, false))
-            ->json(jsonSuccess([
-                'token'=>$token,
+        try {
+            $user  = UserService::login($email,$password);
+            $auth = [
                 'uid'=>$user->id,
-            ]));
+                'username'=>$user->email,
+            ];
+            $token = $this->jwt->getToken($auth);
+            return $this->response
+                ->withCookie(new Cookie('IM_TOKEN', (string)$token, time() + $this->jwt->getTTL(), '/', '', false, false))
+                ->json(jsonSuccess([
+                    'token'=>$token,
+                    'uid'=>$user->id,
+                ]));
+        } catch (\Exception $e) {
+            return $this->response->json(jsonError($e->getMessage()));
+        }
+
     }
 }
