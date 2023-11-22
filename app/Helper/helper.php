@@ -392,7 +392,7 @@ if (!function_exists('wsError')) {
     }
 }
 
-if (!function_exists('jsonSuccess')) {
+if (function_exists('jsonSuccess')) {
     function jsonSuccess($data = [], $code = 0, $msg = 'success')
     {
         $result = [
