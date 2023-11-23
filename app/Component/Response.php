@@ -3,39 +3,38 @@ declare(strict_types = 1);
 namespace App\Component;
 
 use App\Constants\ErrorCode;
-use Hyperf\Codec\Json;
-use Hyperf\HttpMessage\Stream\SwooleStream;
-use Hyperf\HttpServer\Exception\Http\EncodingException;
-use Hyperf\HttpServer\Response as HyperfResponse;
-use Hyperf\Utils\Contracts\Arrayable;
-use Hyperf\Utils\Contracts\Jsonable;
-use Psr\Http\Message\ResponseInterface;
+use Hyperf\Di\Annotation\Inject;
+use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
+use Hyperf\HttpServer\Contract\ResponseInterface;
 
-class Response extends HyperfResponse
+class Response
 {
+
+    #[Inject]
+    protected ResponseInterface $response;
+
     /**
      * @param null $data
-     * @param int $code
      * @param string $message
-     * @return ResponseInterface
+     * @return PsrResponseInterface
      */
-    public function success($data = NULL, int $code = 0, string $message = 'success'): ResponseInterface
+    public function success($data = NULL, string $message = 'success'): PsrResponseInterface
     {
         $result = [
-            'code'    => $code,
+            'code'    => ErrorCode::SUCCESS,
             'msg' => $message,
             'data'    => $data
         ];
-        return $this->json($result);
+        return $this->response->json($result);
     }
 
     /**
      *
      * @param int $code
      * @param string $message
-     * @return ResponseInterface
+     * @return PsrResponseInterface
      */
-    public function error(int $code = -1, string $message = ''): ResponseInterface
+    public function error(int $code = -1, string $message = ''): PsrResponseInterface
     {
         $code   = ($code == 0) ? -1 : $code;
         $msg    = ErrorCode::$errorMessages[$code] ?? $message;
@@ -47,50 +46,12 @@ class Response extends HyperfResponse
     }
 
     /**
-     * @param array|Arrayable|Jsonable $result
+     * @param $data
      *
-     * @param int $statusCode
-     *
-     * @param int $options
-     * @return ResponseInterface
+     * @return PsrResponseInterface
      */
-    public function json($result, int $statusCode = 200, $options = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES): ResponseInterface
+    public function json($data): PsrResponseInterface
     {
-        $data = $this->toJson($result);
-        return $this->getResponse()
-            ->withStatus($statusCode)
-            ->withAddedHeader('content-type', 'application/json; charset=utf-8')
-            ->withBody(new SwooleStream($data));
-    }
-
-    /**
-     * @param array|Arrayable|Jsonable $data
-     * @param int $options
-     *
-     * @return string
-     */
-    protected function toJson($data, int $options = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) : string
-    {
-        try {
-            $result = Json::encode($data, $options);
-        } catch (\Throwable $exception) {
-            throw new EncodingException($exception->getMessage(), $exception->getCode());
-        }
-
-        return $result;
-    }
-
-    /**
-     * @param string $xml
-     * @param int $statusCode
-     *
-     * @return ResponseInterface
-     */
-    public function toWechatXML(string $xml, int $statusCode = 200): ResponseInterface
-    {
-        return $this->getResponse()
-            ->withStatus($statusCode)
-            ->withAddedHeader('content-type', 'application/xml; charset=utf-8')
-            ->withBody(new SwooleStream($xml));
+        return $this->response->json($data);
     }
 }

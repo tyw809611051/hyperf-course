@@ -29,7 +29,7 @@ use function App\Helper\jsonSuccess;
 use Psr\Http\Message\ResponseInterface;
 
 #[AutoController(prefix: "user")]
-class UserController extends AbstractController
+class UserController extends CommonController
 {
 
     #[Inject]
@@ -56,18 +56,13 @@ class UserController extends AbstractController
                 'username'=>$user->email,
             ];
             $token = $this->jwt->getToken($auth);
-//            return $this->response
-//                ->withCookie(new Cookie('IM_TOKEN', (string)$token, time() + $this->jwt->getTTL(), '/', '', false, false))
-//                ->json(jsonSuccess([
-//                    'token'=>$token,
-//                    'uid'=>$user->id,
-//                ]));
-            return $this->response->success([
+
+            return $this->resp->success([
                 'token'=>$token,
                 'uid'=>$user->id,
             ]);
         } catch (\Exception $e) {
-            return $this->response->error($e->getCode());
+            return $this->resp->error($e->getCode());
         }
     }
 
@@ -90,7 +85,7 @@ class UserController extends AbstractController
             $errMsg = array_values($validator->errors()->all());
             throw new InputException(implode(',', $errMsg));
         }
-        return $this->response->success(UserService::register($email, $password));
+        return $this->resp->success(UserService::register($email, $password));
     }
 
 }

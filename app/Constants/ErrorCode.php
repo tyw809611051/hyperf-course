@@ -21,6 +21,8 @@ use Hyperf\Constants\Annotation\Constants;
  */
 class ErrorCode extends AbstractConstants
 {
+    const SUCCESS = 200;   // 接口处理成功
+
     //基本错误码 0～1000
     const AUTH_ERROR = 401;
 

@@ -1,6 +1,5 @@
 <?php
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 /**
  * This file is part of Hyperf.
@@ -13,18 +12,13 @@ declare(strict_types = 1);
 
 namespace App\Controller\Http;
 
+use App\Component\Response;
 use App\Controller\AbstractController;
-use Psr\Http\Message\ResponseInterface;
+use Hyperf\Di\Annotation\Inject;
 
-class HomeController extends CommonController
+class CommonController extends AbstractController
 {
-    /**
-     * 首页
-     * @return ResponseInterface
-     */
-    public function index(): ResponseInterface
-    {
-        return $this->view->render('home/index');
-    }
-}
 
+    #[Inject]
+    protected Response $resp;
+}
