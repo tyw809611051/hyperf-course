@@ -58,7 +58,10 @@
     "autoload-dev": {
         "psr-4": {
             "HyperfTest\\": "./test/"
-        }
+        },
+        "files": [
+            "app/Helper/helper.php"
+        ]
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
