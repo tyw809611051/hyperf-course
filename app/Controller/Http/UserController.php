@@ -91,7 +91,7 @@ class UserController extends CommonController
             }
             $regRs = UserService::register($email,$password);
         } catch (\Exception $e) {
-            return $this->resp->error($e->getCode());
+            return $this->resp->error(intval($e->getCode()));
         }
 
         if (!$regRs) {
