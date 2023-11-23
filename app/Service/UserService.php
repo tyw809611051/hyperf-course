@@ -40,7 +40,7 @@ class UserService
             'sign'     => '',
             'status'   => User::STATUS_OFFLINE,
             'avatar'   => 'https://cdn.sep.cc/avatar/',
-            'create_at'=>date('Y-m-d H:i:s',time()),
+            'created_at'=>date('Y-m-d H:i:s',time()),
         ]);
     }
     /**
