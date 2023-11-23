@@ -60,8 +60,8 @@
   </div>
 </div>
 <script type="module">
-  import {static_user_login, user_register} from '/chat/js/api.js';
-  import {postRequest} from '/chat/js/request.js';
+  import {static_user_login, user_register} from '/public/chat/js/api.js';
+  import {postRequest} from '/public/chat/js/request.js';
 
   layui.use(['form', 'layer', 'jquery'], function () {
     var form = layui.form;
