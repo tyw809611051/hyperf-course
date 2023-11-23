@@ -40,6 +40,7 @@ function setCookie(name, val, exp, path, domain, secure) {
     cookieStr += "; secure";
   }
 
+  console.log("setCookie",cookieStr);
   document.cookie = cookieStr;
 }
 
