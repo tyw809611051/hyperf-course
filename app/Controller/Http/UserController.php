@@ -53,7 +53,7 @@ class UserController extends CommonController
         $password   = $this->request->input('password');
         try {
             $user  = UserService::login($email,$password);
-            $token = $this->jwt->getToken($user->id);
+            $token = $this->jwt->getToken(strval($user->id));
 
             return $this->resp->success([
                 'token'=>$token,
