@@ -72,7 +72,8 @@ export {
   getCookie,
   getQueryValue,
   messageId,
-  isEmpty
+  isEmpty,
+  setCookie,
 }
 
 
