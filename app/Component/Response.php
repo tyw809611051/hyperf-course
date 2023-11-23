@@ -6,18 +6,20 @@ use App\Constants\ErrorCode;
 use Hyperf\Codec\Json;
 use Hyperf\HttpMessage\Stream\SwooleStream;
 use Hyperf\HttpServer\Exception\Http\EncodingException;
-use \Hyperf\HttpServer\Response as HyperfResponse;
+use Hyperf\HttpServer\Response as HyperfResponse;
+use Hyperf\Utils\Contracts\Arrayable;
+use Hyperf\Utils\Contracts\Jsonable;
+use Psr\Http\Message\ResponseInterface;
 
 class Response extends HyperfResponse
 {
     /**
-     * @param null   $data
-     * @param int    $code
+     * @param null $data
+     * @param int $code
      * @param string $message
-     *
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return ResponseInterface
      */
-    public function success($data = NULL, int $code = 0, string $message = 'success'): \Psr\Http\Message\ResponseInterface
+    public function success($data = NULL, int $code = 0, string $message = 'success'): ResponseInterface
     {
         $result = [
             'code'    => $code,
@@ -29,12 +31,11 @@ class Response extends HyperfResponse
 
     /**
      *
-     * @param int    $code
+     * @param int $code
      * @param string $message
-     *
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return ResponseInterface
      */
-    public function error(int $code = -1, string $message = ''): \Psr\Http\Message\ResponseInterface
+    public function error(int $code = -1, string $message = ''): ResponseInterface
     {
         $code   = ($code == 0) ? -1 : $code;
         $msg    = ErrorCode::$errorMessages[$code] ?? $message;
@@ -46,15 +47,14 @@ class Response extends HyperfResponse
     }
 
     /**
-     * @param array|\Hyperf\Utils\Contracts\Arrayable|\Hyperf\Utils\Contracts\Jsonable $result
+     * @param array|Arrayable|Jsonable $result
      *
-     * @param int                                                                      $statusCode
+     * @param int $statusCode
      *
-     * @param int                                                                      $options
-     *
-     * @return \Psr\Http\Message\ResponseInterface
+     * @param int $options
+     * @return ResponseInterface
      */
-    public function json($result, int $statusCode = 200, $options = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES): \Psr\Http\Message\ResponseInterface
+    public function json($result, int $statusCode = 200, $options = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES): ResponseInterface
     {
         $data = $this->toJson($result);
         return $this->getResponse()
@@ -64,12 +64,12 @@ class Response extends HyperfResponse
     }
 
     /**
-     * @param array|\Hyperf\Utils\Contracts\Arrayable|\Hyperf\Utils\Contracts\Jsonable $data
-     * @param int                                                                      $options
+     * @param array|Arrayable|Jsonable $data
+     * @param int $options
      *
      * @return string
      */
-    protected function toJson($data, $options = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) : string
+    protected function toJson($data, int $options = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) : string
     {
         try {
             $result = Json::encode($data, $options);
@@ -82,11 +82,11 @@ class Response extends HyperfResponse
 
     /**
      * @param string $xml
-     * @param int    $statusCode
+     * @param int $statusCode
      *
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return ResponseInterface
      */
-    public function toWechatXML(string $xml, int $statusCode = 200) : PsrResponseInterface
+    public function toWechatXML(string $xml, int $statusCode = 200): ResponseInterface
     {
         return $this->getResponse()
             ->withStatus($statusCode)
