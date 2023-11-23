@@ -21,10 +21,11 @@ use Hyperf\HttpServer\Annotation\AutoController;
 use Hyperf\HttpServer\Annotation\PostMapping;
 use Hyperf\HttpServer\Annotation\RequestMapping;
 use Hyperf\Validation\Contract\ValidatorFactoryInterface;
-use Laminas\Stdlib\ResponseInterface;
+use InvalidArgumentException;
 use Phper666\JWTAuth\JWT;
 use function App\Helper\jsonError;
 use function App\Helper\jsonSuccess;
+use Psr\Http\Message\ResponseInterface;
 
 #[AutoController(prefix: "user")]
 class UserController extends AbstractController
@@ -38,10 +39,11 @@ class UserController extends AbstractController
 
     /**
      * 登录
-     * @throws \InvalidArgumentException
-     * */
+     * @return ResponseInterface
+     * *@throws InvalidArgumentException
+     */
     #[RequestMapping(path: "login",methods: "POST")]
-    public function login()
+    public function login(): ResponseInterface
     {
         $email = $this->request->input('email');
         $password   = $this->request->input('password');
@@ -65,10 +67,10 @@ class UserController extends AbstractController
 
     /**
      * 注册
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return ResponseInterface
      * */
     #[PostMapping(path: "register")]
-    public function register()
+    public function register(): ResponseInterface
     {
         $email = $this->request->input('email');
         $password = $this->request->input('password');
