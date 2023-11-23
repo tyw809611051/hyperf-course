@@ -37,10 +37,13 @@ class Response
     public function error(int $code = -1, string $message = ''): PsrResponseInterface
     {
         $code   = ($code == 0) ? -1 : $code;
-        $msg    = ErrorCode::$errorMessages[$code] ?? $message;
+        if (empty($message)) {
+            $message    = ErrorCode::$errorMessages[$code] ?? $message;
+        }
+
         $result = [
             'code'    => $code,
-            'msg' => $msg,
+            'msg' => $message,
         ];
         return $this->json($result);
     }
