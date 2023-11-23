@@ -53,7 +53,8 @@ class UserService
         return UserLoginLog::query()->insert([
             'uid'=>$uid,
             'user_login_ip'=>intval(sprintf("%u", ip2long(getClientIp()))),
-        ]);
+            'created_at'=>date('Y-m-d H:i:s',time()),
+            ]);
     }
 
     /**
