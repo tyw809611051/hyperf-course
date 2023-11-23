@@ -53,10 +53,15 @@ class UserController extends CommonController
         $password   = $this->request->input('password');
         try {
             $user  = UserService::login($email,$password);
-            $token = $this->jwt->getToken(strval($user->id));
+            $auth = [
+                'uid'=>$user->id,
+                'username'=>$user->email,
+            ];
+            $token = $this->jwt->getToken('default',$auth);
 
             return $this->resp->success([
-                'token'=>$token,
+                'token'=>$token->toString(),
+                'exp' => $this->jwt->getTTL($token->toString()),
                 'uid'=>$user->id,
             ]);
         } catch (\Exception $e) {
