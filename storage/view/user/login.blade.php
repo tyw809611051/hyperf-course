@@ -66,6 +66,9 @@
     var form = layui.form;
     form.on('submit(login)', function(data){
       postRequest(user_login, data.field, function(data){
+          console('token',data);
+          // 设置cookie
+          document.cookie = data.data.token;
         setTimeout(function(){
           location.href = user_home;
         }, 1000);

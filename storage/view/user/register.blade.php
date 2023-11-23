@@ -67,6 +67,7 @@
     var form = layui.form;
     form.on('submit(register)', function (data) {
       postRequest(user_register, data.field, function (data) {
+
         setTimeout(function () {
           location.href = static_user_login;
         }, 1000);

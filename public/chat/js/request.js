@@ -26,7 +26,7 @@ function Request(type, url, params, success_callback, fail_callback){
         if($.isEmptyObject(data)){
           return false;
         }
-        if(data.code && data.code != 0){
+        if(data.code && data.code != 200){
           layer.msg(data.code + ' : ' + data.msg);
           fail_callback && fail_callback(data.data, data.msg);
           return false;
