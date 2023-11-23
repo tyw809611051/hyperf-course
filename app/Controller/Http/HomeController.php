@@ -19,9 +19,7 @@ use Hyperf\View\RenderInterface;
 class HomeController extends AbstractController
 {
     /**
-     * @param \Hyperf\View\RenderInterface $render
-     *
-     * @return \Psr\Http\Message\ResponseInterface
+     * @param RenderInterface $render
      */
     public function index(RenderInterface $render)
     {
