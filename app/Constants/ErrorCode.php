@@ -24,7 +24,10 @@ class ErrorCode extends AbstractConstants
     const SUCCESS = 200;   // 接口处理成功
 
     //基本错误码 0～1000
-    const AUTH_ERROR = 401;
+    const
+        PARAM_ERROR = 301,
+        AUTH_ERROR = 401;
+
 
     //用户错误码 3000～3999
 
@@ -66,6 +69,7 @@ class ErrorCode extends AbstractConstants
 
     public static $errorMessages = [
 
+        self::PARAM_ERROR => '请求参数有误',
         self::AUTH_ERROR => 'Authorization has been denied for this request !',
 
         self::USER_NOT_FOUND                 => 'User not found!',

@@ -13,7 +13,9 @@ declare(strict_types = 1);
 namespace App\Controller\Http;
 
 use App\Component\Response;
+use App\Constants\ErrorCode;
 use App\Controller\AbstractController;
+use App\Exception\ApiException;
 use App\Exception\InputException;
 use App\Service\UserService;
 use Hyperf\Di\Annotation\Inject;
@@ -81,11 +83,21 @@ class UserController extends CommonController
             'email'    => 'required|email|max:50',
             'password' => 'required|string|max:50',
         ]);
-        if ($validator->fails()) {
-            $errMsg = array_values($validator->errors()->all());
-            throw new InputException(implode(',', $errMsg));
+        try {
+            if ($validator->fails()) {
+                $errMsg = array_values($validator->errors()->all());
+
+                throw new ApiException(ErrorCode::PARAM_ERROR,implode(',', $errMsg));
+            }
+            $regRs = UserService::register($email,$password);
+        } catch (\Exception $e) {
+            return $this->resp->error($e->getCode());
         }
-        return $this->resp->success(UserService::register($email, $password));
+
+        if (!$regRs) {
+            return $this->resp->error(ErrorCode::USER_EMAIL_ALREADY_USE);
+        }
+        return $this->resp->success();
     }
 
 }
