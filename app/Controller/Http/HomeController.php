@@ -14,16 +14,17 @@ declare(strict_types = 1);
 namespace App\Controller\Http;
 
 use App\Controller\AbstractController;
-use Hyperf\View\RenderInterface;
+use Psr\Http\Message\ResponseInterface;
 
 class HomeController extends AbstractController
 {
     /**
-     * @param RenderInterface $render
+     * 首页
+     * @return ResponseInterface
      */
-    public function index(RenderInterface $render)
+    public function index(): ResponseInterface
     {
-        return $render->render('home/index');
+        return $this->view->render('home/index');
     }
 }
 

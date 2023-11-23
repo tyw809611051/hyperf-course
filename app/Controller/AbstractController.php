@@ -26,7 +26,7 @@ abstract class AbstractController
     protected RequestInterface $request;
 
     #[Inject]
-    protected \Psr\Http\Message\ResponseInterface $response;
+    protected Response $response;
 
     #[Inject]
     protected RenderInterface $view;
