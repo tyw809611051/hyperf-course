@@ -42,7 +42,7 @@ class UserController extends AbstractController
         $email = $this->request->input('email');
         $password   = $this->request->input('password');
         $data = jsonSuccessV2();
-        return $this->response->json($data);
+        return $data;
         try {
             $user  = UserService::login($email,$password);
             $auth = [
