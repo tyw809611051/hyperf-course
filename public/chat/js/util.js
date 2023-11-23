@@ -19,6 +19,30 @@ function getCookie(cname) {
   return "";
 }
 
+function setCookie(name, val, exp, path, domain, secure) {
+  let cookieStr = name + "=" + encodeURIComponent(val);
+
+  if (exp) {
+    let expirationDate = new Date();
+    expirationDate.setTime(expirationDate.getTime() + exp);
+    cookieStr += "; expires=" + expirationDate.toUTCString();
+  }
+
+  if (path) {
+    cookieStr += "; path=" + path;
+  }
+
+  if (domain) {
+    cookieStr += "; domin=" + domain;
+  }
+
+  if (secure) {
+    cookieStr += "; secure";
+  }
+
+  document.cookie = cookieStr;
+}
+
 function getQueryValue(queryName) {
   var query = decodeURI(window.location.search.substring(1));
   var vars = query.split("&");

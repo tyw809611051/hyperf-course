@@ -3,7 +3,9 @@ declare(strict_types = 1);
 namespace App\Component;
 
 use App\Constants\ErrorCode;
+use Hyperf\Context\Context;
 use Hyperf\Di\Annotation\Inject;
+use Hyperf\HttpMessage\Cookie\Cookie;
 use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
 use Hyperf\HttpServer\Contract\ResponseInterface;
 
@@ -56,5 +58,12 @@ class Response
     public function json($data): PsrResponseInterface
     {
         return $this->response->json($data);
+    }
+
+    public function cookie(Cookie $cookie): static
+    {
+        $response = $this->response->withCookie($cookie);
+        Context::set(PsrResponseInterface::class, $response);
+        return $this;
     }
 }

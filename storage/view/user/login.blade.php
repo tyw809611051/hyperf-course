@@ -61,14 +61,13 @@
 <script type="module">
   import {user_login, user_home} from '/public/chat/js/api.js';
   import {postRequest} from '/public/chat/js/request.js';
-
+  import {setCookie} from '/public/chat/js/util.js';
   layui.use(['form', 'layer', 'jquery'], function(){
     var form = layui.form;
     form.on('submit(login)', function(data){
       postRequest(user_login, data.field, function(data){
-          console.log('token',data);
           // 设置cookie
-          document.cookie = data.data.token;
+          setCookie('IM_TOKEN',data.token,data.exp);
         setTimeout(function(){
           location.href = user_home;
         }, 1000);
