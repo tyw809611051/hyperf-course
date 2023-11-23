@@ -17,7 +17,7 @@ use Hyperf\HttpServer\Annotation\AutoController;
 use Hyperf\HttpServer\Annotation\RequestMapping;
 
 #[AutoController(prefix: "index")]
-class IndexController extends AbstractController
+class IndexController extends CommonController
 {
 
     #[RequestMapping(path: "login",methods: "get")]
