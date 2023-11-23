@@ -25,4 +25,12 @@ class IndexController extends CommonController
     {
         return $this->view->render('user/login');
     }
+
+    /**
+     * @RequestMapping(path="register",methods="GET")
+     */
+    public function register()
+    {
+        return $this->view->render('user/register');
+    }
 }
