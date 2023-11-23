@@ -64,7 +64,7 @@ class UserController extends CommonController
                 'uid'=>$user->id,
             ]);
         } catch (\Exception $e) {
-            return $this->resp->error($e->getCode());
+            return $this->resp->error(intval($e->getCode()),$e->getMessage());
         }
     }
 
