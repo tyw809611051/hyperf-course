@@ -22,6 +22,27 @@ use function App\Helper\getClientIp;
 class UserService
 {
     /**
+     * @param string $email
+     * @param string $password
+     *
+     * @return bool
+     */
+    public static function register(string $email, string $password) : bool
+    {
+        $user = self::findUserByEmail($email);
+        if ($user) {
+            throw new ApiException(ErrorCode::USER_EMAIL_ALREADY_USE);
+        }
+        return User::query()->insert([
+            'email'    => $email,
+            'password' => password_hash($password, CRYPT_BLOWFISH),
+            'username' => $email,
+            'sign'     => '',
+            'status'   => User::STATUS_OFFLINE,
+            'avatar'   => 'https://cdn.sep.cc/avatar/',
+        ]);
+    }
+    /**
      * @param int $uid
      *
      * @return bool

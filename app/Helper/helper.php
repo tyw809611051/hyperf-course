@@ -393,12 +393,12 @@ if (!function_exists('wsError')) {
 }
 
 if (!function_exists('jsonSuccess')) {
-    function jsonSuccess($data = [], $code = 0, $msg = 'success')
+    function jsonSuccess($data = NULL, int $code = 0, string $message = 'success')
     {
         return [
             'data'   => $data,
             'code' => $code,
-            'msg'    => $msg,
+            'msg'    => $message,
         ];
     }
 }
