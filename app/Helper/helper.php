@@ -8,7 +8,7 @@ use App\Constants\WsMessage;
 use App\Exception\ApiException;
 use App\Model\User;
 use Hyperf\Utils\Codec\Json;
-use Hyperf\Utils\Context;
+use \Hyperf\Context\Context;
 use Phper666\JWTAuth\JWT;
 use Psr\Http\Message\ServerRequestInterface;
 
