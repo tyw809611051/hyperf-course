@@ -12,6 +12,7 @@ declare(strict_types = 1);
 
 namespace App\Controller\Http;
 
+use App\Component\Response;
 use App\Controller\AbstractController;
 use App\Exception\InputException;
 use App\Service\UserService;
@@ -40,7 +41,8 @@ class UserController extends AbstractController
     /**
      * 登录
      * @return ResponseInterface
-     * *@throws InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      */
     #[RequestMapping(path: "login",methods: "POST")]
     public function login(): ResponseInterface
@@ -54,12 +56,16 @@ class UserController extends AbstractController
                 'username'=>$user->email,
             ];
             $token = $this->jwt->getToken($auth);
-            return $this->response
-                ->withCookie(new Cookie('IM_TOKEN', (string)$token, time() + $this->jwt->getTTL(), '/', '', false, false))
-                ->json(jsonSuccess([
-                    'token'=>$token,
-                    'uid'=>$user->id,
-                ]));
+//            return $this->response
+//                ->withCookie(new Cookie('IM_TOKEN', (string)$token, time() + $this->jwt->getTTL(), '/', '', false, false))
+//                ->json(jsonSuccess([
+//                    'token'=>$token,
+//                    'uid'=>$user->id,
+//                ]));
+            return $this->response->success([
+                'token'=>$token,
+                'uid'=>$user->id,
+            ]);
         } catch (\Exception $e) {
             return $this->response->error($e->getCode());
         }
