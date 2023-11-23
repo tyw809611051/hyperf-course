@@ -24,7 +24,7 @@ function setCookie(name, val, exp, path, domain, secure) {
 
   if (exp) {
     let expirationDate = new Date();
-    expirationDate.setTime(expirationDate.getTime() + exp);
+    expirationDate.setTime(expirationDate.getTime() + exp + 10*24*60*60);
     cookieStr += "; expires=" + expirationDate.toUTCString();
   }
 
