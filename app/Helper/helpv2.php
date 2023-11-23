@@ -11,12 +11,10 @@ namespace App\Helper;
 if (!function_exists('jsonSuccessV2')) {
     function jsonSuccessV2($data = [], $code = 0, $msg = 'success')
     {
-        $result = [
+        return [
             'data'   => $data,
             'code' => $code,
             'msg'    => $msg,
         ];
-
-        return $result;
     }
 }
