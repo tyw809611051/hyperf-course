@@ -7,6 +7,7 @@ use App\Constants\ErrorCode;
 use App\Constants\WsMessage;
 use App\Exception\ApiException;
 use App\Model\User;
+use Hyperf\Context\ApplicationContext;
 use Hyperf\Utils\Codec\Json;
 use \Hyperf\Context\Context;
 use Phper666\JWTAuth\JWT;
@@ -349,7 +350,8 @@ if (!function_exists('checkAuth')) {
         $token   = $request->getCookieParams()['IM_TOKEN'] ?? '';
         if (strlen($token) > 0) {
             try {
-                $jwt = make(JWT::class);
+//                $jwt = make(JWT::class);
+                $jwt = ApplicationContext::getContainer()->get(JWT::class);
                 if (strlen($token) > 0) {
                     $jwtData = $jwt->getParserData($token);
                     $user    = User::query()->where(['id' => $jwtData['uid']])->first();
