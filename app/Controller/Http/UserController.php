@@ -112,8 +112,9 @@ class UserController extends CommonController
     public function home(): ResponseInterface
     {
         try {
-
-            $this->logger->info('IM_TOKEN: ' . json_encode($this->request->getCookieParams()), []);
+            $cookie = $this->request->getCookieParams();
+            $this->request->withAddedHeader('Authorization', 'Bearer ' . $cookie['IM_TOKEN']);
+            $this->logger->info('IM_TOKEN: ' . json_encode(), []);
             $jwtData = JWTUtil::getParserData($this->request);
             if (! $jwtData) {
                 $this->logger->info('user: ' . $jwtData, []);
