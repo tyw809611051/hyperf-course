@@ -68,9 +68,10 @@
       postRequest(user_login, data.field, function(data){
           // 设置cookie
           setCookie('IM_TOKEN',data.token,data.exp,'/');
-        setTimeout(function(){
-          location.href = user_home;
-        }, 1000);
+          setTimeout(function(){
+              location.setRequestHeader("Authorization", "Bearer "+data.token);
+              location.href = user_home;
+          }, 1000);
       });
       return false;
     })
