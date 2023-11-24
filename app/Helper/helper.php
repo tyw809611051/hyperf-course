@@ -10,7 +10,7 @@ use App\Model\User;
 use Hyperf\Context\ApplicationContext;
 use Hyperf\Utils\Codec\Json;
 use \Hyperf\Context\Context;
-use Phper666\JWTAuth\JWT;
+use Phper666\JWTAuth\Util\JWTUtil;
 use Psr\Http\Message\ServerRequestInterface;
 
 if (!function_exists('autoHidSubstr')) {
@@ -353,7 +353,8 @@ if (!function_exists('checkAuth')) {
 //                $jwt = make(JWT::class);
                 $jwt = ApplicationContext::getContainer()->get(JWT::class);
                 if (strlen($token) > 0) {
-                    $jwtData = $jwt->getParserData($token);
+//                    $jwtData = $jwt->getParserData($token);
+                    $jwtData = JWTUtil::getParserData($request);
                     $user    = User::query()->where(['id' => $jwtData['uid']])->first();
                     if (empty($user)) {
                         throw new ApiException(ErrorCode::AUTH_ERROR);
