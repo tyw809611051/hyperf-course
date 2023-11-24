@@ -60,7 +60,7 @@
 
 <script type="module">
   import {user_login, user_home} from '/public/chat/js/api.js';
-  import {postRequest} from '/public/chat/js/request.js';
+  import {postRequest,getRequest} from '/public/chat/js/request.js';
   import {setCookie} from '/public/chat/js/util.js';
   layui.use(['form', 'layer', 'jquery'], function(){
     var form = layui.form;
@@ -69,8 +69,7 @@
           // 设置cookie
           setCookie('IM_TOKEN',data.token,data.exp,'/');
           setTimeout(function(){
-              location.setRequestHeader("Authorization", "Bearer "+data.token);
-              location.href = user_home;
+              getRequest(user_home);
           }, 1000);
       });
       return false;
