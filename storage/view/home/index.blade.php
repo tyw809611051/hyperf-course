@@ -255,9 +255,9 @@
   <nav class="top-nav ">
     <ul class="clearfix">
       <li><a target="_blank"  href="https://github.com/komorebi-php/hyperf-chat/">Github</a></li>
-      <li><a target="_blank"  href="/index/register">Register</a></li>
-      <li><a target="_blank"  href="/index/login">Login</a></li>
-      <li><a target="_blank"  href="/user/home">聊天室</a></li>
+      <li><a target="_self"  href="/index/register">Register</a></li>
+      <li><a target="_self"  href="/index/login">Login</a></li>
+      <li><a target="_self"  href="/user/home">聊天室</a></li>
     </ul>
   </nav>
   <div class="main">
@@ -268,9 +268,9 @@
 <nav class="foot-nav">
   <ul class="clearfix">
     <li><a target="_blank"  href="https://github.com//hyperf-im">Github</a></li>
-    <li><a target="_blank"  href="/index/register">Register</a></li>
-    <li><a target="_blank"  href="/index/login">Login</a></li>
-    <li><a target="_blank"  href="/user/home">聊天室</a></li>
+    <li><a target="_self"  href="/index/register">Register</a></li>
+    <li><a target="_self"  href="/index/login">Login</a></li>
+    <li><a target="_self"  href="/user/home">聊天室</a></li>
   </ul>
 </nav>
 </body>
