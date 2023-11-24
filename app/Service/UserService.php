@@ -55,6 +55,14 @@ class UserService
         return User::query()->where('email', '=', $email)->first() ?? null;
     }
 
+    /**
+     * @return null|User|\Hyperf\Database\Model\Builder|\Hyperf\Database\Model\Model|object
+     */
+    public static function findUserById(int $uid)
+    {
+        return User::query()->find($uid) ?? null;
+    }
+
     public static function login(string $email, string $password): User
     {
         $user = self::findUserByEmail($email);

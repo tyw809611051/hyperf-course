@@ -112,10 +112,6 @@ class UserController extends CommonController
     public function home(): ResponseInterface
     {
         try {
-//            $cookie = $this->request->getCookieParams();
-//            $token = isset($cookie['IM_TOKEN']) ? $cookie['IM_TOKEN'] : '';
-//            $this->request->withAddedHeader('Authorization', 'Bearer ' . $token);
-//            $this->logger->info('IM_TOKEN: ' . $token, []);
             $jwtData = JWTUtil::getParserData($this->request);
             $this->logger->info('user: ' . json_encode($jwtData), []);
             if (! $jwtData) {
@@ -127,9 +123,10 @@ class UserController extends CommonController
         }
 
         $menus = \Hyperf\Config\Config('menu');
+        $user = UserService::findUserById($jwtData['uid']);
         return $this->view->render('user/home', [
             'menus' => $menus,
-            'user' => $jwtData,
+            'user' => $user,
             'wsUrl' => env('WS_URL'),
             'webRtcUrl' => env('WEB_RTC_URL'),
             'stunServer' => 'stunServer',
