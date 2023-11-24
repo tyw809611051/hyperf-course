@@ -117,11 +117,13 @@ class UserController extends CommonController
             $this->logger->info('token: ' . $user, []);
             if (! $user) {
                 $this->logger->info('user: ' . $user, []);
-                return $this->resp->redirect(env('APP_URL') . '/index/login');
+                return $this->resp->error(-1, $user);
+                //                return $this->resp->redirect(env('APP_URL') . '/index/login');
             }
         } catch (Exception $e) {
             $this->logger->info('user exception: ' . $e->getMessage(), []);
-            return $this->resp->redirect(env('APP_URL') . '/index/login');
+            return $this->resp->error(-2, $user);
+            //            return $this->resp->redirect(env('APP_URL') . '/index/login');
         }
 
         $menus = \Hyperf\Config\Config('menu');
