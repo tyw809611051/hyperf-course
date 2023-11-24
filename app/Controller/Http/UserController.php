@@ -113,7 +113,7 @@ class UserController extends CommonController
     {
         try {
 
-            $this->logger->info('IM_TOKEN: ' . $this->request->getCookieParams(), []);
+            $this->logger->info('IM_TOKEN: ' . json_encode($this->request->getCookieParams()), []);
             $jwtData = JWTUtil::getParserData($this->request);
             if (! $jwtData) {
                 $this->logger->info('user: ' . $jwtData, []);
