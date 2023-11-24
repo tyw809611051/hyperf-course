@@ -17,6 +17,7 @@ use App\Exception\ApiException;
 use App\Service\UserService;
 use Exception;
 use Hyperf\Di\Annotation\Inject;
+use Hyperf\HttpMessage\Cookie\Cookie;
 use Hyperf\HttpServer\Annotation\AutoController;
 use Hyperf\HttpServer\Annotation\PostMapping;
 use Hyperf\HttpServer\Annotation\RequestMapping;
@@ -63,7 +64,8 @@ class UserController extends CommonController
             ];
             $token = $this->jwt->getToken('default', $auth);
 
-            return $this->resp->success([
+            $cookie = new Cookie('IM_TOKEN', $token->toString(), $this->jwt->getTTL($token->toString()));
+            return $this->resp->cookie($cookie)->success([
                 'token' => $token->toString(),
                 'exp' => $this->jwt->getTTL($token->toString()),
                 'uid' => $user->id,
