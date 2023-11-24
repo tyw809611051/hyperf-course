@@ -115,9 +115,10 @@ class UserController extends CommonController
         try {
             $user = checkAuth();
             $this->logger->info('token: ' . $user, []);
+            return $this->resp->success($user);
             if (! $user) {
                 $this->logger->info('user: ' . $user, []);
-                return $this->resp->error(-1, json_encode($user));
+                return $this->resp->success($user);
                 //                return $this->resp->redirect(env('APP_URL') . '/index/login');
             }
         } catch (Exception $e) {
