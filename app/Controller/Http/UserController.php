@@ -63,12 +63,14 @@ class UserController extends CommonController
             ];
             $token = $this->jwt->getToken('default', $auth);
 
-            $cookie = new Cookie('IM_TOKEN', $token->toString(), $this->jwt->getTTL($token->toString()) * 10);
-            return $this->resp->cookie($cookie)->success([
-                'token' => $token->toString(),
-                'exp' => $this->jwt->getTTL($token->toString()),
-                'uid' => $user->id,
-            ]);
+            $cookie = new Cookie('IM_TOKEN', $token->toString(), $this->jwt->getTTL($token->toString()) * 100, '/');
+            //            return $this->resp->cookie($cookie)->success([
+            //                'token' => $token->toString(),
+            //                'exp' => $this->jwt->getTTL($token->toString()),
+            //                'uid' => $user->id,
+            //            ]);
+            return $this->resp->cookie($cookie)->redirect('/user/home')
+                ->withAddedHeader('Authorization', 'Bearer ' . $token->toString());
         } catch (Exception $e) {
             return $this->resp->error(intval($e->getCode()), $e->getMessage());
         }
