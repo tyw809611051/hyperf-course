@@ -43,7 +43,7 @@ class UserController extends CommonController
     public function __construct(LoggerFactory $loggerFactory)
     {
         // 第一个参数对应日志的 name, 第二个参数对应 config/autoload/logger.php 内的 key
-        $this->logger = $loggerFactory->get('USER:', 'default');
+        $this->logger = $loggerFactory->get('log', 'default');
     }
 
     /**
@@ -112,11 +112,11 @@ class UserController extends CommonController
     {
         try {
             if (! $user = checkAuth()) {
-                $this->logger->info('user: ' . $user);
+                $this->logger->info('user: ' . $user,[]);
                 return $this->resp->redirect(env('APP_URL') . '/index/login');
             }
         } catch (Exception $e) {
-            $this->logger->info('user exception: ' . $e->getMessage());
+            $this->logger->info('user exception: ' . $e->getMessage(),[]);
             return $this->resp->redirect(env('APP_URL') . '/index/login');
         }
 
