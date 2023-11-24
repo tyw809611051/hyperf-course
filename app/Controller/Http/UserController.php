@@ -25,10 +25,9 @@ use Hyperf\Logger\LoggerFactory;
 use Hyperf\Validation\Contract\ValidatorFactoryInterface;
 use InvalidArgumentException;
 use Phper666\JWTAuth\JWT;
+use Phper666\JWTAuth\Util\JWTUtil;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
-
-use function App\Helper\checkAuth;
 
 #[AutoController(prefix: 'user')]
 class UserController extends CommonController
@@ -64,7 +63,7 @@ class UserController extends CommonController
             ];
             $token = $this->jwt->getToken('default', $auth);
 
-            $cookie = new Cookie('IM_TOKEN', $token->toString(), $this->jwt->getTTL($token->toString())*10);
+            $cookie = new Cookie('IM_TOKEN', $token->toString(), $this->jwt->getTTL($token->toString()) * 10);
             return $this->resp->cookie($cookie)->success([
                 'token' => $token->toString(),
                 'exp' => $this->jwt->getTTL($token->toString()),
@@ -113,9 +112,9 @@ class UserController extends CommonController
     public function home(): ResponseInterface
     {
         try {
-            $user = checkAuth();
-            if (! $user) {
-                $this->logger->info('user: ' . $user, []);
+            $jwtData = JWTUtil::getParserData($this->request);
+            if (! $jwtData) {
+                $this->logger->info('user: ' . $jwtData, []);
                 return $this->resp->redirect(env('APP_URL') . '/index/login');
             }
         } catch (Exception $e) {
@@ -126,7 +125,7 @@ class UserController extends CommonController
         $menus = \Hyperf\Config\Config('menu');
         return $this->view->render('user/home', [
             'menus' => $menus,
-            'user' => $user,
+            'user' => $jwtData,
             'wsUrl' => env('WS_URL'),
             'webRtcUrl' => env('WEB_RTC_URL'),
             'stunServer' => 'stunServer',
