@@ -20,6 +20,7 @@ use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\AutoController;
 use Hyperf\HttpServer\Annotation\PostMapping;
 use Hyperf\HttpServer\Annotation\RequestMapping;
+use Hyperf\Logger\LoggerFactory;
 use Hyperf\Validation\Contract\ValidatorFactoryInterface;
 use InvalidArgumentException;
 use Phper666\JWTAuth\JWT;
@@ -38,6 +39,12 @@ class UserController extends CommonController
 
     #[Inject]
     private JWT $jwt;
+
+    public function __construct(LoggerFactory $loggerFactory)
+    {
+        // 第一个参数对应日志的 name, 第二个参数对应 config/autoload/logger.php 内的 key
+        $this->logger = $loggerFactory->get('USER:', 'default');
+    }
 
     /**
      * 登录.
