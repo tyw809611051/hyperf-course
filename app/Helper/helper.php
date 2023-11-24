@@ -350,7 +350,7 @@ if (!function_exists('checkAuth')) {
         if (strlen($token) > 0) {
             try {
                 $jwt = make(JWT::class);
-                if (strlen($token) > 0 && $jwt->checkToken($token)) {
+                if (strlen($token) > 0) {
                     $jwtData = $jwt->getParserData($token);
                     $user    = User::query()->where(['id' => $jwtData['uid']])->first();
                     if (empty($user)) {
