@@ -66,4 +66,9 @@ class Response
         Context::set(PsrResponseInterface::class, $response);
         return $this;
     }
+
+    public function redirect($url, $status = 302): PsrResponseInterface
+    {
+        return $this->response->redirect($url,$status);
+    }
 }

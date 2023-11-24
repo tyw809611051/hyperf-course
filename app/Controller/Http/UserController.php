@@ -26,6 +26,7 @@ use Hyperf\HttpServer\Annotation\RequestMapping;
 use Hyperf\Validation\Contract\ValidatorFactoryInterface;
 use InvalidArgumentException;
 use Phper666\JWTAuth\JWT;
+use function App\Helper\checkAuth;
 use function App\Helper\jsonError;
 use function App\Helper\jsonSuccess;
 use Psr\Http\Message\ResponseInterface;
@@ -101,4 +102,27 @@ class UserController extends CommonController
         return $this->resp->success();
     }
 
+    /**
+     * home
+     * */
+    #[RequestMapping(path: "home", methods: "GET")]
+    public function home(): ResponseInterface
+    {
+        try {
+            if (!$user = checkAuth()) {
+                return $this->resp->redirect(env('APP_URL') . '/index/login');
+            }
+        } catch (\Exception $e) {
+            return $this->resp->redirect(env('APP_URL') . '/index/login');
+        }
+
+        $menus = \Hyperf\Config\Config('menu');
+        return $this->view->render('user/home',[
+            'menus'      => $menus,
+            'user'       => $user,
+            'wsUrl'      => env('WS_URL'),
+            'webRtcUrl'  => env('WEB_RTC_URL'),
+            'stunServer' => 'stunServer'
+        ]);
+    }
 }
