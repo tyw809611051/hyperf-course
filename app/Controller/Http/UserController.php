@@ -112,11 +112,11 @@ class UserController extends CommonController
     {
         try {
             if (! $user = checkAuth()) {
-                $this->logger->info('user: ', $user);
+                $this->logger->info('user: ' . $user);
                 return $this->resp->redirect(env('APP_URL') . '/index/login');
             }
         } catch (Exception $e) {
-            $this->logger->info('user exception: ', $e->getMessage());
+            $this->logger->info('user exception: ' . $e->getMessage());
             return $this->resp->redirect(env('APP_URL') . '/index/login');
         }
 
