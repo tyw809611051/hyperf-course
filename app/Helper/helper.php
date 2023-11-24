@@ -347,6 +347,7 @@ if (!function_exists('checkAuth')) {
          */
         $request = Context::get(ServerRequestInterface::class);
         $token   = $request->getCookieParams()['IM_TOKEN'] ?? '';
+        return $token;
         if (strlen($token) > 0) {
             try {
                 $jwt = make(JWT::class);

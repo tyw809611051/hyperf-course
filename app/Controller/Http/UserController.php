@@ -111,12 +111,14 @@ class UserController extends CommonController
     public function home(): ResponseInterface
     {
         try {
-            if (! $user = checkAuth()) {
-                $this->logger->info('user: ' . $user,[]);
+            $user = checkAuth();
+            $this->logger->info('token: ' . $user, []);
+            if (! $user) {
+                $this->logger->info('user: ' . $user, []);
                 return $this->resp->redirect(env('APP_URL') . '/index/login');
             }
         } catch (Exception $e) {
-            $this->logger->info('user exception: ' . $e->getMessage(),[]);
+            $this->logger->info('user exception: ' . $e->getMessage(), []);
             return $this->resp->redirect(env('APP_URL') . '/index/login');
         }
 
