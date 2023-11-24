@@ -34,7 +34,6 @@ class UserController extends CommonController
     #[Inject]
     protected ValidatorFactoryInterface $validationFactory;
 
-    #[Inject]
     protected LoggerInterface $logger;
 
     #[Inject]
