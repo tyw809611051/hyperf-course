@@ -117,7 +117,7 @@ class UserController extends CommonController
 //            $this->request->withAddedHeader('Authorization', 'Bearer ' . $token);
 //            $this->logger->info('IM_TOKEN: ' . $token, []);
             $jwtData = JWTUtil::getParserData($this->request);
-            $this->logger->info('user: ' . $jwtData, []);
+            $this->logger->info('user: ' . json_encode($jwtData), []);
             if (! $jwtData) {
                 return $this->resp->redirect(env('APP_URL') . '/index/login');
             }
