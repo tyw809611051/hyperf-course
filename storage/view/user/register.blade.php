@@ -55,7 +55,7 @@
       </div>
       <hr/>
 
-      <p><a href="/index/login" class="fl">立即登录</a></p>
+      <p><a href="/index/login" target="_self" class="fl">立即登录</a></p>
     </form>
   </div>
 </div>

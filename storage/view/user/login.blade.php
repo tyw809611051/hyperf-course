@@ -53,7 +53,7 @@
             </div>
             <hr/>
 
-            <p><a href="/index/register" class="fl">立即注册</a></p>
+            <p><a href="/index/register" target="_self" class="fl">立即注册</a></p>
         </form>
     </div>
 </div>
