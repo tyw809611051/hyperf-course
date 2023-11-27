@@ -20,6 +20,7 @@ use Hyperf\Context\Context;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Contract\ResponseInterface as HttpResponse;
 use Phper666\JwtAuth\Jwt;
+use Phper666\JWTAuth\Util\JWTUtil;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -50,6 +51,9 @@ class JwtAuthMiddleware implements MiddlewareInterface
         $isValidToken = false;
         $token = $request->getHeader('Authorization')[0] ?? '';
         if (empty($token)) {
+            $token = $request->getCookieParams()['IM_TOKEN'] ?? '';
+        }
+        if (empty($token)) {
             $token = $this->prefix . ' ' . ($request->getQueryParams()['token'] ?? '');
         }
 
@@ -67,7 +71,8 @@ class JwtAuthMiddleware implements MiddlewareInterface
         }
 
         if ($isValidToken) {
-            $jwtData = $this->jwt->getParserData($token);
+            $request = $request->withAddedHeader('Authorization', 'Bearer ' . $token);
+            $jwtData = JWTUtil::getParserData($request);
             $user = User::query()->where(['id' => $jwtData['uid']])->first();
             if (empty($user)) {
                 throw new ApiException(ErrorCode::AUTH_ERROR);
@@ -79,6 +84,6 @@ class JwtAuthMiddleware implements MiddlewareInterface
             return $handler->handle($request);
         }
 
-        return $this->resp->error(401, '对不起，token验证没有通过');
+        return $this->resp->redirect('/index/login');
     }
 }
