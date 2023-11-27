@@ -74,10 +74,6 @@ class UserController extends CommonController
                 'exp' => $this->jwt->getTTL($token->toString()),
                 'uid' => $user->id,
             ]);
-            //            return $this->resp->cookie($cookie)->redirect('user/home')
-            //                ->withAddedHeader('Authorization', 'Bearer ' . $token->toString());
-            //            return $this->response->withCookie($cookie)->redirect('/user/home', 302, 'https')
-            //                ->withAddedHeader('Authorization', 'Bearer ' . $token->toString());
         } catch (Exception $e) {
             return $this->resp->error(intval($e->getCode()), $e->getMessage());
         }
@@ -121,14 +117,6 @@ class UserController extends CommonController
     public function home(): ResponseInterface
     {
         try {
-//            $cookie = $this->request->cookie('IM_TOKEN', '');
-//            if ($cookie) {
-//                $this->request->withAddedHeader('Authorization', 'Bearer ' . $cookie);
-//            }
-//            $token = $this->request->getHeader('Authorization');
-//            $jwtData = JWTUtil::getParserData($this->request);
-
-//            $this->logger->info('user: ' . json_encode($jwtData), []);
             $user = checkAuth();
             if (! $user) {
                 return $this->resp->redirect(env('APP_URL') . '/index/login');
@@ -139,7 +127,6 @@ class UserController extends CommonController
         }
 
         $menus = \Hyperf\Config\Config('menu');
-//        $user = UserService::findUserById($user['uid']);
         return $this->view->render('user/home', [
             'menus' => $menus,
             'user' => $user,
