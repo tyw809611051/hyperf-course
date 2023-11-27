@@ -19,7 +19,6 @@ use App\Model\User;
 use Hyperf\Context\Context;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Contract\ResponseInterface as HttpResponse;
-use Phper666\JwtAuth\Jwt;
 use Phper666\JWTAuth\Util\JWTUtil;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -32,9 +31,6 @@ class JwtAuthMiddleware implements MiddlewareInterface
     protected Response $resp;
 
     protected string $prefix = 'Bearer';
-
-    #[Inject]
-    protected JWT $jwt;
 
     //    public function __construct(HttpResponse $response, Jwt $jwt)
     //    {
@@ -73,6 +69,5 @@ class JwtAuthMiddleware implements MiddlewareInterface
         Context::set(ServerRequestInterface::class, $request);
 
         return $handler->handle($request);
-        return $this->resp->redirect('/index/login');
     }
 }
