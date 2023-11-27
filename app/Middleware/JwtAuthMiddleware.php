@@ -57,12 +57,12 @@ class JwtAuthMiddleware implements MiddlewareInterface
             var_dump('token-3', $tokenAll);
         }
 
-        if (empty($token)) {
+        if (empty($tokenAll)) {
             return $this->resp->redirect('/index/login');
         }
 
         $request = $request->withAddedHeader('Authorization', $tokenAll);
-        var_dump($token);
+        var_dump($tokenAll);
         $jwtData = JWTUtil::getParserData($request);
         $user = User::query()->where(['id' => $jwtData['uid']])->first();
         if (empty($user)) {
