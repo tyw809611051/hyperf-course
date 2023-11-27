@@ -72,6 +72,7 @@ class UserController extends CommonController
             $token = $this->jwt->getToken('default', $auth);
 
             $cookie = new Cookie('IM_TOKEN', $token->toString(), $this->jwt->getTTL($token->toString()) * 1000, '/');
+            var_dump('login-token',$token->toString());
             return $this->resp->cookie($cookie)->success([
                 'token' => $token->toString(),
                 'exp' => $this->jwt->getTTL($token->toString()),
