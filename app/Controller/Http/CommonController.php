@@ -27,6 +27,7 @@ class CommonController extends AbstractController
 
     public function __construct()
     {
+        var_dump(1111111);
         $cookie = $this->request->cookie('Authorization', '');
         var_dump('request cookie', $cookie);
         if ($cookie) {
