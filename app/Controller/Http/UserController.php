@@ -44,10 +44,10 @@ class UserController extends CommonController
     {
         // 第一个参数对应日志的 name, 第二个参数对应 config/autoload/logger.php 内的 key
         $this->logger = $loggerFactory->get('log', 'default');
-        $cookie = $this->request->cookie('Authorization', '');
+        $cookie = $this->request->cookie('IM_TOKEN', '');
         var_dump('request cookie', $cookie);
         if ($cookie) {
-            $this->request->withAddedHeader('Authorization', $cookie);
+            $this->request->withAddedHeader('Authorization', 'Bearer ' . $cookie);
         }
     }
 
