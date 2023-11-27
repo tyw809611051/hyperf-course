@@ -69,7 +69,7 @@
                        class="layui-input">
             </div>
             <div class="layui-col-xs1" style="margin-top: 15px;">
-                <button class="layui-btn layui-icon" lay-submit lay-filter="search">&#xe615;</button>
+                <button class="layui-btn layui-icon" lay-submit lay-filter="search">搜索</button>
             </div>
         </div>
 

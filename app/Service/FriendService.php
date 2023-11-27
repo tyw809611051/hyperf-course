@@ -18,6 +18,7 @@ use App\Model\FriendGroup;
 use App\Model\FriendRelation;
 use App\Model\Group;
 use App\Model\GroupRelation;
+use App\Model\User;
 
 class FriendService
 {
@@ -111,5 +112,10 @@ class FriendService
             ];
         }
         return $result;
+    }
+
+    public static function getRecommendedFriend(int $limit)
+    {
+        return User::query()->whereNull('deleted_at')->orderBy('created_at', 'desc')->limit($limit)->get();
     }
 }

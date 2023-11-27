@@ -39,4 +39,9 @@ class FriendController extends CommonController
             'groupname' => $result->friend_group_name,
         ]);
     }
+
+    public function getRecommendedFriend()
+    {
+        return $this->resp->success(FriendService::getRecommendedFriend(20));
+    }
 }
