@@ -122,6 +122,7 @@ class UserController extends CommonController
         try {
             $cookie = $this->request->cookie('IM_TOKEN', '');
             if ($cookie) {
+                var_dump('11112', $cookie);
                 $this->request->withHeader('Authorization', 'Bearer ' . $cookie);
             }
             $token = $this->request->getHeaderLine('Authorization');
