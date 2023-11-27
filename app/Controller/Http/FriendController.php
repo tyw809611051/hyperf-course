@@ -27,7 +27,7 @@ class FriendController extends CommonController
     public function createFriendGroup()
     {
         $user = $this->request->getAttribute('user');
-        $friendGroupName = $this->request->input('firend_group_name');
+        $friendGroupName = $this->request->input('friend_group_name');
         try {
             $result = FriendService::createFriendGroup($user->id, $friendGroupName);
         } catch (Exception $e) {
