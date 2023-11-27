@@ -48,7 +48,7 @@ class UserService
     }
 
     /**
-     * @return null|User|\Hyperf\Database\Model\Builder|\Hyperf\Database\Model\Model|object
+     * @return null|\Hyperf\Database\Model\Builder|\Hyperf\Database\Model\Model|object|User
      */
     public static function findUserByEmail(string $email)
     {
@@ -56,7 +56,7 @@ class UserService
     }
 
     /**
-     * @return null|User|\Hyperf\Database\Model\Builder|\Hyperf\Database\Model\Model|object
+     * @return null|\Hyperf\Database\Model\Builder|\Hyperf\Database\Model\Model|object|User
      */
     public static function findUserById(int $uid)
     {
@@ -75,5 +75,21 @@ class UserService
 
         self::userLoginLog($user['id']);
         return $user;
+    }
+
+    public static function getUserByIds(array $ids)
+    {
+        return User::query()->whereNull('deleted_at')->whereIn('id', $ids)->get()->toArray();
+    }
+
+    public static function getMine(User $userInfo)
+    {
+        return [
+            'username' => $userInfo->username,
+            'id' => $userInfo->id,
+            'status' => User::STATUS_TEXT[User::STATUS_ONLINE],
+            'sign' => $userInfo->sign,
+            'avatar' => $userInfo->avatar,
+        ];
     }
 }

@@ -14,20 +14,23 @@ namespace App\Controller\Http;
 
 use App\Constants\ErrorCode;
 use App\Exception\ApiException;
+use App\Middleware\JwtAuthMiddleware;
+use App\Service\FriendService;
 use App\Service\UserService;
 use Exception;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpMessage\Cookie\Cookie;
 use Hyperf\HttpServer\Annotation\AutoController;
+use Hyperf\HttpServer\Annotation\Middleware;
 use Hyperf\HttpServer\Annotation\PostMapping;
 use Hyperf\HttpServer\Annotation\RequestMapping;
 use Hyperf\Logger\LoggerFactory;
 use Hyperf\Validation\Contract\ValidatorFactoryInterface;
 use InvalidArgumentException;
 use Phper666\JWTAuth\JWT;
-use Phper666\JWTAuth\Util\JWTUtil;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
+
 use function App\Helper\checkAuth;
 
 #[AutoController(prefix: 'user')]
@@ -133,6 +136,20 @@ class UserController extends CommonController
             'wsUrl' => env('WS_URL'),
             'webRtcUrl' => env('WEB_RTC_URL'),
             'stunServer' => 'stunServer',
+        ]);
+    }
+
+    #[RequestMapping(path: 'init', methods: 'GET')]
+    #[Middleware(JwtAuthMiddleware::class)]
+    public function userInit()
+    {
+        $user = $this->request->getAttribute('user');
+        $friend = FriendService::getFriend($user->id);
+        $group = FriendService::getGroup($user->id);
+        return $this->resp->success([
+            'mine' => UserService::getMine($user),
+            'friend' => $friend,
+            'group' => $group,
         ]);
     }
 }
