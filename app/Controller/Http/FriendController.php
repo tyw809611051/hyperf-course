@@ -40,7 +40,7 @@ class FriendController extends CommonController
         ]);
     }
 
-    #[RequestMapping(path: "getRecommendedFriend",methods: "GET")]
+    #[RequestMapping(path: 'getRecommendedFriend',methods: 'GET')]
     #[Middleware(JwtAuthMiddleware::class)]
     public function getRecommendedFriend()
     {
