@@ -69,7 +69,9 @@ class UserController extends CommonController
             //                'exp' => $this->jwt->getTTL($token->toString()),
             //                'uid' => $user->id,
             //            ]);
-            return $this->resp->cookie($cookie)->redirect('user/home')
+            //            return $this->resp->cookie($cookie)->redirect('user/home')
+            //                ->withAddedHeader('Authorization', 'Bearer ' . $token->toString());
+            return $this->response->redirect('/user/home', 302, 'https')
                 ->withAddedHeader('Authorization', 'Bearer ' . $token->toString());
         } catch (Exception $e) {
             return $this->resp->error(intval($e->getCode()), $e->getMessage());
