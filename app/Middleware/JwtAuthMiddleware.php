@@ -71,7 +71,7 @@ class JwtAuthMiddleware implements MiddlewareInterface
             return $this->resp->redirect('/index/login');
         }
 
-        $request = $request->withAddedHeader('Authorization', $this->prefix . ' ' . $token);
+        $request = $request->withAddedHeader('Authorization', $tokenAll);
         var_dump($token);
         $jwtData = JWTUtil::getParserData($request);
         $user = User::query()->where(['id' => $jwtData['uid']])->first();
