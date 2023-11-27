@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{{--<!DOCTYPE html>--}}
 <html lang="en">
 @include('common/header', ['title' => '登录'])
 <style>

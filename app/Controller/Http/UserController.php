@@ -113,6 +113,7 @@ class UserController extends CommonController
     #[RequestMapping(path: 'home', methods: 'GET')]
     public function home(): ResponseInterface
     {
+        var_dump(11111);die;
         try {
             $jwtData = JWTUtil::getParserData($this->request);
             $this->logger->info('user: ' . json_encode($jwtData), []);
