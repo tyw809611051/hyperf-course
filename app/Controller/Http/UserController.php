@@ -63,7 +63,7 @@ class UserController extends CommonController
             ];
             $token = $this->jwt->getToken('default', $auth);
 
-            $cookie = new Cookie('IM_TOKEN', $token->toString(), $this->jwt->getTTL($token->toString()) * 100, '/');
+            $cookie = new Cookie('IM_TOKEN', $token->toString(), $this->jwt->getTTL($token->toString()) * 1000, '/');
             //            return $this->resp->cookie($cookie)->success([
             //                'token' => $token->toString(),
             //                'exp' => $this->jwt->getTTL($token->toString()),
@@ -71,7 +71,7 @@ class UserController extends CommonController
             //            ]);
             //            return $this->resp->cookie($cookie)->redirect('user/home')
             //                ->withAddedHeader('Authorization', 'Bearer ' . $token->toString());
-            return $this->response->redirect('/user/home', 302, 'https')
+            return $this->response->withCookie($cookie)->redirect('/user/home', 302, 'https')
                 ->withAddedHeader('Authorization', 'Bearer ' . $token->toString());
         } catch (Exception $e) {
             return $this->resp->error(intval($e->getCode()), $e->getMessage());
