@@ -114,8 +114,8 @@ class FriendService
         return $result;
     }
 
-    public static function getRecommendedFriend(int $limit)
+    public static function getRecommendedFriend(int $uid,int $limit)
     {
-        return User::query()->whereNull('deleted_at')->orderBy('created_at', 'desc')->limit($limit)->get();
+        return User::query()->where('id','<>',$uid)->whereNull('deleted_at')->orderBy('created_at', 'desc')->limit($limit)->get();
     }
 }

@@ -40,8 +40,11 @@ class FriendController extends CommonController
         ]);
     }
 
+    #[RequestMapping(path: "getRecommendedFriend",methods: "GET")]
+    #[Middleware(JwtAuthMiddleware::class)]
     public function getRecommendedFriend()
     {
-        return $this->resp->success(FriendService::getRecommendedFriend(20));
+        $user = $this->request->getAttribute('user');
+        return $this->resp->success(FriendService::getRecommendedFriend($user['id'],20));
     }
 }
