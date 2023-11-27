@@ -24,7 +24,7 @@ class GroupRelation extends Model
      *
      * @var array
      */
-    protected array $fillable = ['id', 'uid', 'group_id', 'created_at', 'updated_at'];
+    protected array $fillable = ['id', 'uid', 'group_id', 'created_at', 'updated_at','deleted_at'];
     /**
      * The attributes that should be cast to native types.
      *
