@@ -124,6 +124,8 @@ class UserController extends CommonController
             if ($cookie) {
                 $this->request->withAddedHeader('Authorization', 'Bearer ' . $cookie);
             }
+            $token = $this->request->getHeaderLine('Authorization');
+            var_dump('token', $token);
             $jwtData = JWTUtil::getParserData($this->request);
             $this->logger->info('user: ' . json_encode($jwtData), []);
             if (! $jwtData) {
