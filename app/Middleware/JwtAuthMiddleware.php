@@ -25,7 +25,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Throwable;
 
 class JwtAuthMiddleware implements MiddlewareInterface
 {
@@ -48,43 +47,36 @@ class JwtAuthMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $isValidToken = false;
-        $token = $request->getHeader('Authorization')[0] ?? '';
-        if (empty($token)) {
-            $token = $this->prefix . ' ' . $request->getCookieParams()['IM_TOKEN'] ?? '';
-        }
-        if (empty($token)) {
-            $token = $this->prefix . ' ' . ($request->getQueryParams()['token'] ?? '');
-        }
-
-        if (strlen($token) > 0) {
-            $token = ucfirst($token);
-            $arr = explode($this->prefix . ' ', $token);
+        $tokenAll = $request->getHeader('Authorization')[0] ?? '';
+        $token = "";
+        if ($tokenAll) {
+            $arr = explode($this->prefix . ' ', $tokenAll);
             $token = $arr[1] ?? '';
-            try {
-                if (strlen($token) > 0) {
-                    $isValidToken = true;
-                }
-            } catch (Throwable $e) {
-                throw new ApiException(ErrorCode::AUTH_ERROR);
-            }
         }
 
-        if ($isValidToken) {
-            $request = $request->withAddedHeader('Authorization', $token);
-            var_dump($token);
-            $jwtData = JWTUtil::getParserData($request);
-            $user = User::query()->where(['id' => $jwtData['uid']])->first();
-            if (empty($user)) {
-                throw new ApiException(ErrorCode::AUTH_ERROR);
-            }
-            $request = Context::get(ServerRequestInterface::class);
-            $request = $request->withAttribute('user', $user);
-            Context::set(ServerRequestInterface::class, $request);
-
-            return $handler->handle($request);
+        if (empty($token)) {
+            $token = $request->getCookieParams()['IM_TOKEN'] ?? '';
+        }
+        if (empty($token)) {
+            $token = $request->getQueryParams()['token'] ?? '';
         }
 
+        if (empty($token)) {
+            return $this->resp->redirect('/index/login');
+        }
+
+        $request = $request->withAddedHeader('Authorization', 'Bearer ' . $token);
+        var_dump($token);
+        $jwtData = JWTUtil::getParserData($request);
+        $user = User::query()->where(['id' => $jwtData['uid']])->first();
+        if (empty($user)) {
+            throw new ApiException(ErrorCode::AUTH_ERROR);
+        }
+        $request = Context::get(ServerRequestInterface::class);
+        $request = $request->withAttribute('user', $user);
+        Context::set(ServerRequestInterface::class, $request);
+
+        return $handler->handle($request);
         return $this->resp->redirect('/index/login');
     }
 }
