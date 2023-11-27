@@ -9,15 +9,17 @@ layui.use('layim', function(layim){
     init: {
       url: user_init,
       type: 'get',
-
+      headers: {
+        Authorization: 'Bearer ' + getCookie("IM_TOKEN")
+      },
       data: {
         // token: getCookie('IM_TOKEN')
-        tokens: 1111
+        tokens: 222
       },
-      beforeSend: function(request){
-        console.log('initCookie',getCookie("IM_TOKEN"))
-        request.setRequestHeader("Authorization", 'Bearer ' + getCookie("IM_TOKEN"));
-      },
+      // beforeSend: function(request){
+      //   console.log('initCookie',getCookie("IM_TOKEN"))
+      //   request.setRequestHeader("Authorization", 'Bearer ' + getCookie("IM_TOKEN"));
+      // },
     },
     members: {
       url: group_get_relation,
