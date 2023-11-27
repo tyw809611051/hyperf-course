@@ -152,4 +152,10 @@ class UserController extends CommonController
             'group' => $group,
         ]);
     }
+
+    #[RequestMapping(path: "signOut",methods: "GET")]
+    public function signOut()
+    {
+        return $this->response->withCookie(new Cookie('IM_TOKEN', ''))->redirect(env('APP_URL') . '/index/login');
+    }
 }
