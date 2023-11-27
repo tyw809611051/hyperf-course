@@ -48,24 +48,14 @@ class JwtAuthMiddleware implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $tokenAll = $request->getHeader('Authorization')[0] ?? '';
-        $token = "";
-        if ($tokenAll) {
-            $arr = explode($this->prefix . ' ', $tokenAll);
-            $token = $arr[1] ?? '';
-            var_dump('token-1',$token);
+        if (empty($tokenAll)) {
+            $tokenAll = $this->prefix . ' ' . $request->getCookieParams()['IM_TOKEN'] ?? '';
+            var_dump('token-2', $tokenAll);
         }
-
-
-        if (empty($token)) {
-            $token = $request->getCookieParams()['IM_TOKEN'] ?? '';
-            var_dump('token-2',$token);
+        if (empty($tokenAll)) {
+            $tokenAll = $this->prefix . ' ' . $request->getQueryParams()['token'] ?? '';
+            var_dump('token-3', $tokenAll);
         }
-
-        if (empty($token)) {
-            $token = $request->getQueryParams()['token'] ?? '';
-            var_dump('token-3',$token);
-        }
-
 
         if (empty($token)) {
             return $this->resp->redirect('/index/login');
