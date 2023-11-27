@@ -9,9 +9,15 @@ layui.use('layim', function(layim){
     init: {
       url: user_init,
       type: 'get',
+
       data: {
-        token: getCookie('IM_TOKEN')
-      }
+        // token: getCookie('IM_TOKEN')
+        tokens: 1111
+      },
+      beforeSend: function(request){
+        console.log('initCookie',getCookie("IM_TOKEN"))
+        request.setRequestHeader("Authorization", 'Bearer ' + getCookie("IM_TOKEN"));
+      },
     },
     members: {
       url: group_get_relation,

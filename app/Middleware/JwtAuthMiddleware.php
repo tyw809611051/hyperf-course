@@ -51,7 +51,7 @@ class JwtAuthMiddleware implements MiddlewareInterface
         $isValidToken = false;
         $token = $request->getHeader('Authorization')[0] ?? '';
         if (empty($token)) {
-            $token = $request->getCookieParams()['IM_TOKEN'] ?? '';
+            $token = $this->prefix . ' ' . $request->getCookieParams()['IM_TOKEN'] ?? '';
         }
         if (empty($token)) {
             $token = $this->prefix . ' ' . ($request->getQueryParams()['token'] ?? '');
@@ -71,7 +71,7 @@ class JwtAuthMiddleware implements MiddlewareInterface
         }
 
         if ($isValidToken) {
-            $request->withAddedHeader('Authorization', 'Bearer ' . $token);
+//            $request->withAddedHeader('Authorization', $token);
             $jwtData = JWTUtil::getParserData($request);
             $user = User::query()->where(['id' => $jwtData['uid']])->first();
             if (empty($user)) {
