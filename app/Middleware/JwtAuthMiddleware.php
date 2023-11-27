@@ -53,13 +53,16 @@ class JwtAuthMiddleware implements MiddlewareInterface
             $arr = explode($this->prefix . ' ', $tokenAll);
             $token = $arr[1] ?? '';
         }
+        var_dump('token-1',$token);
 
         if (empty($token)) {
             $token = $request->getCookieParams()['IM_TOKEN'] ?? '';
         }
+        var_dump('token-2',$token);
         if (empty($token)) {
             $token = $request->getQueryParams()['token'] ?? '';
         }
+        var_dump('token-3',$token);
 
         if (empty($token)) {
             return $this->resp->redirect('/index/login');
