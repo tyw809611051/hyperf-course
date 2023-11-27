@@ -59,7 +59,7 @@
         }
     </style>
 </head>
-@include('chat/header', ['title' => '查找好友'])
+@include('common/header', ['title' => '查找好友'])
 <body>
 <div class="layui-form">
     <div class="layui-container" style="padding:0">
@@ -100,8 +100,8 @@
 
 </div>
 <script type="module">
-  import {friend_get_recommended, friend_search, friend_apply} from '/chat/js/api.js';
-  import {getRequest, postRequest} from '/chat/js/request.js';
+  import {friend_get_recommended, friend_search, friend_apply} from '/public/chat/js/api.js';
+  import {getRequest, postRequest} from '/public/chat/js/request.js';
 
   layui.use(['layim', 'laypage', 'form', 'flow'], function(){
     var layim = layui.layim, layer = layui.layer, laytpl = layui.laytpl, form = layui.form, $ = layui.jquery, laypage = layui.laypage;
