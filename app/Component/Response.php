@@ -65,6 +65,6 @@ class Response
 
     public function redirect($url, $status = 302): PsrResponseInterface
     {
-        return $this->response->redirect($url, $status);
+        return $this->response->redirect($url, $status, 'https');
     }
 }

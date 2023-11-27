@@ -69,23 +69,9 @@
       postRequest(user_login, data.field, function(data){
           // 设置cookie
           setCookie('IM_TOKEN',data.token,data.exp,'/');
-          setTimeout(function(){
-              // getRequest(user_home);
-              $.ajax({
-                  url: user_home,
-                  type: 'GET',
-                  beforeSend: function(request){
-                      console.log('headerCookie',data.token)
-                      request.setRequestHeader("Authorization", 'Bearer ' + data.token);
-                  },
-                  success: function(data){
-                    console.log('success');
-                  },
-                  error: function(){
-                      console.log('error');
-                  }
-              })
-          }, 1000);
+          // setTimeout(function(){
+          //     getRequest(user_home);
+          // }, 1000);
       });
       return false;
     })
