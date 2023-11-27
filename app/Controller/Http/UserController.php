@@ -123,9 +123,9 @@ class UserController extends CommonController
             $cookie = $this->request->cookie('IM_TOKEN', '');
             if ($cookie) {
                 var_dump('11112', $cookie);
-                $this->request = $this->request->withAddedHeader('Authorization', 'Bearer ' . $cookie);
+                $this->request->withAddedHeader('Authorization', 'Bearer ' . $cookie);
             }
-            $token = $this->request->getHeaderLine('Authorization');
+            $token = $this->request->getHeader('Authorization');
             var_dump('token', $token);
             $jwtData = JWTUtil::getParserData($this->request);
             $this->logger->info('user: ' . json_encode($jwtData), []);
