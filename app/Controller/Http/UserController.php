@@ -116,6 +116,7 @@ class UserController extends CommonController
     public function home(): ResponseInterface
     {
         try {
+            var_dump($this->request);
             $jwtData = JWTUtil::getParserData($this->request);
             $this->logger->info('user: ' . json_encode($jwtData), []);
             if (! $jwtData) {
