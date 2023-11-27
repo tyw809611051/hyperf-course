@@ -141,7 +141,7 @@ class UserController extends CommonController
 
     #[RequestMapping(path: 'init', methods: 'GET')]
     #[Middleware(JwtAuthMiddleware::class)]
-    public function userInit()
+    public function init(): ResponseInterface
     {
         $user = $this->request->getAttribute('user');
         $friend = FriendService::getFriend($user->id);
