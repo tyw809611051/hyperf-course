@@ -354,6 +354,7 @@ if (! function_exists('checkAuth')) {
         if (strlen($token) > 0) {
             try {
                 if (strlen($token) > 0) {
+                    $request->withAddedHeader('Authorization', 'Bearer ' . $token);
                     $jwtData = JWTUtil::getParserData($request);
                     $user = User::query()->where(['id' => $jwtData['uid']])->first();
                     if (empty($user)) {

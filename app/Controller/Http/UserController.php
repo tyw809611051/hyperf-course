@@ -28,6 +28,7 @@ use Phper666\JWTAuth\JWT;
 use Phper666\JWTAuth\Util\JWTUtil;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
+use function App\Helper\checkAuth;
 
 #[AutoController(prefix: 'user')]
 class UserController extends CommonController
@@ -120,16 +121,16 @@ class UserController extends CommonController
     public function home(): ResponseInterface
     {
         try {
-            $cookie = $this->request->cookie('IM_TOKEN', '');
-            if ($cookie) {
-                var_dump('11112', $cookie);
-                $this->request->withAddedHeader('Authorization', 'Bearer ' . $cookie);
-            }
-            $token = $this->request->getHeader('Authorization');
-            var_dump('token', $token);
-            $jwtData = JWTUtil::getParserData($this->request);
-            $this->logger->info('user: ' . json_encode($jwtData), []);
-            if (! $jwtData) {
+//            $cookie = $this->request->cookie('IM_TOKEN', '');
+//            if ($cookie) {
+//                $this->request->withAddedHeader('Authorization', 'Bearer ' . $cookie);
+//            }
+//            $token = $this->request->getHeader('Authorization');
+//            $jwtData = JWTUtil::getParserData($this->request);
+
+//            $this->logger->info('user: ' . json_encode($jwtData), []);
+            $user = checkAuth();
+            if (! $user) {
                 return $this->resp->redirect(env('APP_URL') . '/index/login');
             }
         } catch (Exception $e) {
@@ -138,7 +139,7 @@ class UserController extends CommonController
         }
 
         $menus = \Hyperf\Config\Config('menu');
-        $user = UserService::findUserById($jwtData['uid']);
+//        $user = UserService::findUserById($user['uid']);
         return $this->view->render('user/home', [
             'menus' => $menus,
             'user' => $user,
