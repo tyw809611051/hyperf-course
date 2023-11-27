@@ -45,7 +45,6 @@ class UserController extends CommonController
         // 第一个参数对应日志的 name, 第二个参数对应 config/autoload/logger.php 内的 key
         $this->logger = $loggerFactory->get('log', 'default');
         $cookie = $this->request->cookie('IM_TOKEN', '');
-        var_dump('request cookie', $cookie);
         if ($cookie) {
             $this->request->withAddedHeader('Authorization', 'Bearer ' . $cookie);
         }
@@ -121,7 +120,10 @@ class UserController extends CommonController
     public function home(): ResponseInterface
     {
         try {
-            var_dump($this->request);
+            $cookie = $this->request->cookie('IM_TOKEN', '');
+            if ($cookie) {
+                $this->request->withAddedHeader('Authorization', 'Bearer ' . $cookie);
+            }
             $jwtData = JWTUtil::getParserData($this->request);
             $this->logger->info('user: ' . json_encode($jwtData), []);
             if (! $jwtData) {
