@@ -71,7 +71,7 @@ class JwtAuthMiddleware implements MiddlewareInterface
         }
 
         if ($isValidToken) {
-            $request = $request->withAddedHeader('Authorization', 'Bearer ' . $token);
+            //            $request = $request->withAddedHeader('Authorization', 'Bearer ' . $token);
             $jwtData = JWTUtil::getParserData($request);
             $user = User::query()->where(['id' => $jwtData['uid']])->first();
             if (empty($user)) {
