@@ -157,7 +157,8 @@ class UserController extends CommonController
     #[RequestMapping(path: "signOut",methods: "GET")]
     public function signOut()
     {
-        $this->jwt->logout($this->request);
+        $token = $this->request->getCookieParams()['IM_TOKEN'] ?? '';
+        $this->jwt->logout($token);
         return $this->response->withCookie(new Cookie('IM_TOKEN', ''))->redirect(env('APP_URL') . '/index/login');
     }
 }
