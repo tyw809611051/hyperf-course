@@ -23,7 +23,7 @@ class GroupController extends CommonController
 {
     #[RequestMapping(path: 'create', methods: 'POST')]
     #[Middleware(JwtAuthMiddleware::class)]
-    public function createGroup()
+    public function create()
     {
         $user = $this->request->getAttribute('user');
         $groupName = $this->request->input('group_name');
