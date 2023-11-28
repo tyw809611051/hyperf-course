@@ -54,4 +54,46 @@ class IndexController extends CommonController
     {
         return $this->view->render('group/find');
     }
+
+    #[RequestMapping(path: 'application', methods: 'GET')]
+    public function msgBox()
+    {
+        return $this->view->render('user/application');
+    }
+
+    #[RequestMapping(path: 'friendInfo', methods: 'GET')]
+    public function friendInfo()
+    {
+        return $this->view->render('friend/info');
+    }
+
+    #[RequestMapping(path: 'userInfo', methods: 'GET')]
+    public function userInfo()
+    {
+        return $this->view->render('user/info');
+    }
+
+    #[RequestMapping(path: 'groupInfo', methods: 'GET')]
+    public function groupInfo()
+    {
+        return $this->view->render('group/info');
+    }
+
+    #[RequestMapping(path: 'history', methods: 'GET')]
+    public function chatLog()
+    {
+        return $this->view->render('user/history');
+    }
+
+    #[RequestMapping(path: 'about', methods: 'GET')]
+    public function about()
+    {
+        return $this->view->render('chat/about');
+    }
+
+    #[RequestMapping(path: 'friendRoom', methods: 'GET')]
+    public function friendRoom()
+    {
+        return $this->view->render('friend/room');
+    }
 }

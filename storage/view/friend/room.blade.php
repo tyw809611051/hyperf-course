@@ -9,9 +9,9 @@
   <meta itemprop="name" content="WebRTC">
   <meta name="mobile-web-app-capable" content="yes">
   <title>视频</title>
-  <link rel="stylesheet" href="/chat/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/layim/css/layui.css" type="text/css">
-  <script src="/layim/layui.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="/public/chat/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/public/layui/css/layui.css" type="text/css">
+  <script src="/public/layui/layui.js" type="text/javascript"></script>
   <style>
     .videos {
       font-size: 0;
@@ -57,8 +57,8 @@
 </div>
 <script src="/chat/js/adapter.js"></script>
 <script type="module">
-  import {createVideoSocket, socketEvent,setLoadingIndex} from '/chat/js/video.js';
-  import {getCookie} from '/chat/js/util.js';
+  import {createVideoSocket, socketEvent,setLoadingIndex} from '/public/chat/js/video.js';
+  import {getCookie} from '/public/chat/js/util.js';
 
   layui.use(['layer'], function () {
     var layer = layui.layer;

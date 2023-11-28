@@ -131,89 +131,74 @@
     }
   </style>
 </head>
-@include('common/header', ['title' => '好友资料'])
+@include('common/header', ['title' => '个人资料'])
 <body>
 <div class="layui-form" id="LAY_view">
 
 </div>
-
+@verbatim
 <script type="text/html" title="资料模版" id="LAY_tpl" style="display:none;">
-  <div class="layui-form-item" style="padding-top: 15px;">
-    <div class="layim-msgbox">
-      <li>
-        <a href="javascript:void(0);" target="_blank">
-          <img src="@{{ d.avatar }}"
-               class="layui-circle layim-msgbox-avatar">
-        </a>
-        <p class="layim-msgbox-user">
-          <span style="letter-spacing: 5px;">编 号</span> @{{ d.userId }}
-        </p>
-        <p class="layim-msgbox-user">
-          <span style="letter-spacing: 5px;">昵 称</span> @{{ d.username }}
-        </p>
-        <button class="layui-btn layui-btn layui-btn-primary chat" data-name="@{{ d.username }}"
-                data-avatar="@{{ d.avatar }}" data-type="chat" data-uid="@{{d.userId}}">发送消息
-        </button>
-      </li>
-    </div>
 
-  </div>
-  <div class="layui-col-xs12 pt10">
-    <div class="layui-col-xs12 pt10">
-      <label class="label">注册时间</label>
-      <div class="block">
-        <div class="label_key">@{{d.createdAt}}</div>
+  <form class="layui-form" action="" style="margin-top: 15px;">
+    <div class="layui-form-item layui-col-xs11">
+      <label class="layui-form-label">用户昵称</label>
+      <div class="layui-input-block">
+        <input type="text" name="username" lay-verify="required" autocomplete="off"
+               placeholder="输入用户昵称" value="{{d.username}}" class="layui-input">
       </div>
     </div>
-    <label class="label">邮&nbsp;&nbsp;箱</label>
-    <div class="block">
-      <div class="label_key">@{{d.email}}</div>
+    <div class="layui-form-item layui-col-xs11">
+      <label class="layui-form-label">用户头像</label>
+      <div class="layui-input-block">
+        <input type="text" name="avatar" lay-verify="required|url" autocomplete="off"
+               placeholder="输入url即可" value="{{d.avatar}}" class="layui-input">
+      </div>
     </div>
-  </div>
-  <div class="layui-col-xs12 pt10">
-    <label class="label">签&nbsp;&nbsp;名</label>
-    <div class="block">
-      <div class="label_key">@{{d.sign}}</div>
+    <div class="layui-form-item layui-col-xs11">
+      <label class="layui-form-label">注册时间</label>
+      <p class="layim-msgbox-user" style="line-height: 28px">
+        {{d.created_at}}
+      </p>
     </div>
-  </div>
+    <div class="layui-form-item" style="padding-top: 30px;">
+      <div class="layui-input-block">
+        <button class="layui-btn" lay-submit lay-filter="save">保存</button>
+      </div>
+    </div>
+  </form>
+
 </script>
+@endverbatim
 </body>
 <script type="module">
-  import {getQueryValue} from '/public/chat/js/util.js';
-  import {friend_info} from '/public/chat/js/api.js';
-  import {getRequest} from '/public/chat/js/request.js';
+  import {user_info, user_change_name_avatar} from '/public/chat/js/api.js';
+  import {getRequest, postRequest} from '/public/chat/js/request.js';
 
-  layui.use(['laydate', 'form', 'laytpl', 'laydate'], function () {
+  layui.use(['form', 'laydate'], function () {
     var form = layui.form
       , laydate = layui.laydate;
-    var layim = layui.layim
-      , layer = layui.layer
-      , laytpl = layui.laytpl
-      , $ = layui.jquery;
+    layui.use(['laydate', 'form', 'laytpl'], function () {
+      var layim = layui.layim
+        , layer = layui.layer
+        , laytpl = layui.laytpl
+        , $ = layui.jquery;
 
-    let id = getQueryValue('id');
-    getRequest(friend_info, {user_id: id}, function (data) {
-      var html = laytpl(LAY_tpl.innerHTML).render(data);
-      $('#LAY_view').html(html);
-    }, function () {
-      setTimeout(function () {
-        let index = parent.layer.getFrameIndex(window.name);
-        parent.layer.close(index);
-      }, 1000)
-    });
-
-    $('body').on('click', '.chat', function () {
-      let index = parent.layer.getFrameIndex(window.name);
-      parent.layer.close(index);
-      parent.layui.layim.chat({
-        name: $(this).data('name')
-        , type: 'friend'
-        , avatar: $(this).data('avatar')
-        , id: $(this).data('uid')
+      form.on("submit(save)", function (data) {
+        postRequest(user_change_name_avatar, data.field, function (result) {
+          parent.layui.$(".layui-layim-user").html(data.field.username);
+          parent.layui.$(".layui-nav-img").attr('src',data.field.avatar);
+          setTimeout(function () {
+            let index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index);
+          }, 1000);
+        });
+        return false;
+      });
+      getRequest(user_info, {}, function (data) {
+        var html = laytpl(LAY_tpl.innerHTML).render(data);
+        $('#LAY_view').html(html);
       });
     });
   });
-
-
 </script>
 </html>
