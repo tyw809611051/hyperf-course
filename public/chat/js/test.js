@@ -24,7 +24,8 @@ layui.config({
             url: group_get_relation //接口地址（返回的数据格式见下文）
             ,type: 'get' //默认get，一般可不填
             ,data: {
-                    token: getCookie('IM_TOKEN')
+                id:1,
+                token: getCookie('IM_TOKEN')
             } //额外参数
         }
 
