@@ -55,7 +55,7 @@
     <video id="remoteVideo" autoplay></video>
   </div>
 </div>
-<script src="/chat/js/adapter.js"></script>
+<script src="/public/chat/js/adapter.js"></script>
 <script type="module">
   import {createVideoSocket, socketEvent,setLoadingIndex} from '/public/chat/js/video.js';
   import {getCookie} from '/public/chat/js/util.js';
