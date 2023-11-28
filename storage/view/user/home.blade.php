@@ -120,7 +120,8 @@ EOF;
 <input type="hidden" class="wsUrl" value="{{$wsUrl}} ">
 <input type="hidden" class="webRtcUrl" value="{{ $webRtcUrl }}">
 <input type="hidden" class="stunServer" value="{{ $stunServer }}">
-<script type="module" src="/public/chat/js/init.js"></script>
+{{--<script type="module" src="/public/chat/js/init.js"></script>--}}
+<script src="/public/chat/js/test.js"></script>
 <script type="module">
   import {static_user_info} from '/public/chat/js/api.js';
 
