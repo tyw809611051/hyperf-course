@@ -34,4 +34,15 @@ class GroupController extends CommonController
         return $this->resp
             ->success(GroupService::createGroup($user->id, $groupName, $avatar, (int) $size, $introduction, (int) $validation));
     }
+
+    #[RequestMapping(path: 'getRecommendedGroup', methods: 'GET')]
+    #[Middleware(JwtAuthMiddleware::class)]
+    public function getRecommendedGroup()
+    {
+        try {
+            return $this->response->success(GroupService::getRecommendedGroup(20));
+        } catch (\Throwable $throwable) {
+            return $this->resp->error($throwable->getCode(), $throwable->getMessage());
+        }
+    }
 }

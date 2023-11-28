@@ -50,4 +50,9 @@ class GroupService
         }
         return self::findGroupById($groupId);
     }
+
+    public static function getRecommendedGroup(int $limit)
+    {
+        return Group::query()->whereNull('deleted_at')->orderBy('created_at', 'desc')->limit($limit)->get()->toArray();
+    }
 }

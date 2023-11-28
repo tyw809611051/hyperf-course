@@ -48,4 +48,10 @@ class IndexController extends CommonController
     {
         return $this->view->render('group/create');
     }
+
+    #[RequestMapping(path: 'findGroup', methods: 'GET')]
+    public function findGroup()
+    {
+        return $this->view->render('group/find');
+    }
 }
