@@ -21,9 +21,11 @@ layui.config({
 
         //获取群员接口（返回的数据格式见下文）
         ,members: {
-            url: '' //接口地址（返回的数据格式见下文）
+            url: group_get_relation //接口地址（返回的数据格式见下文）
             ,type: 'get' //默认get，一般可不填
-            ,data: {} //额外参数
+            ,data: {
+                    token: getCookie('IM_TOKEN')
+            } //额外参数
         }
 
         //上传图片接口（返回的数据格式见下文），若不开启图片上传，剔除该项即可

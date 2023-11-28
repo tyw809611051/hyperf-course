@@ -55,4 +55,24 @@ class GroupService
     {
         return Group::query()->whereNull('deleted_at')->orderBy('created_at', 'desc')->limit($limit)->get()->toArray();
     }
+
+    public static function getGroupRelationById(int $groupId)
+    {
+        $groupRelations = GroupRelation::query()->whereNull('deleted_at')->where(['group_id' => $groupId])->get()->toArray();
+
+        $userIds = array_column($groupRelations, 'uid');
+        $userInfos = UserService::getUserByIds($userIds);
+        $data = [];
+
+        foreach ($userInfos as $info) {
+            $data['list'][] = [
+                'username' => $info['username'],
+                'id' => $info['id'],
+                'avatar' => $info['avatar'],
+                'sign' => $info['sign'],
+            ];
+        }
+
+        return $data;
+    }
 }

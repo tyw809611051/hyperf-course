@@ -17,6 +17,7 @@ use App\Service\GroupService;
 use Hyperf\HttpServer\Annotation\AutoController;
 use Hyperf\HttpServer\Annotation\Middleware;
 use Hyperf\HttpServer\Annotation\RequestMapping;
+use Throwable;
 
 #[AutoController(prefix: 'group')]
 class GroupController extends CommonController
@@ -41,8 +42,16 @@ class GroupController extends CommonController
     {
         try {
             return $this->resp->success(GroupService::getRecommendedGroup(20));
-        } catch (\Throwable $throwable) {
+        } catch (Throwable $throwable) {
             return $this->resp->error($throwable->getCode(), $throwable->getMessage());
         }
+    }
+
+    #[RequestMapping(path: 'getGroupRelation', methods: 'GET')]
+    #[Middleware(JwtAuthMiddleware::class)]
+    public function getGroupRelation()
+    {
+        $groupId = $this->request->input('id');
+        return $this->resp->success(GroupService::getGroupRelationById((int) $groupId));
     }
 }
