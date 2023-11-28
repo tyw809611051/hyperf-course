@@ -13,12 +13,17 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Constants\ErrorCode;
+use App\Constants\MemoryTable;
 use App\Exception\ApiException;
 use App\Model\FriendGroup;
 use App\Model\FriendRelation;
 use App\Model\Group;
 use App\Model\GroupRelation;
 use App\Model\User;
+use App\Model\UserApplication;
+use App\Task\UserTask;
+use Hyperf\Context\ApplicationContext;
+use Hyperf\Memory\TableManager;
 
 class FriendService
 {
@@ -114,8 +119,46 @@ class FriendService
         return $result;
     }
 
-    public static function getRecommendedFriend(int $uid,int $limit)
+    public static function getRecommendedFriend(int $uid, int $limit)
     {
-        return User::query()->where('id','<>',$uid)->whereNull('deleted_at')->orderBy('created_at', 'desc')->limit($limit)->get();
+        return User::query()->where('id', '<>', $uid)->whereNull('deleted_at')->orderBy('created_at', 'desc')->limit($limit)->get();
+    }
+
+    public static function apply(int $userId, int $receiverId, int $friendGroupId, string $applicationReason)
+    {
+        if ($userId == $receiverId) {
+            throw new ApiException(ErrorCode::FRIEND_NOT_ADD_SELF);
+        }
+        /**
+         * @var FriendRelation $check
+         */
+        $check = FriendRelation::query()
+            ->whereNull('deleted_at')
+            ->where(['uid' => $userId])
+            ->where(['friend_id' => $receiverId])
+            ->first();
+        if ($check) {
+            throw new ApiException(ErrorCode::FRIEND_RELATION_ALREADY);
+        }
+
+        User::query()->whereNull('deleted_at')->find($userId);
+
+        $friendGroupInfo = self::findFriendGroupById($friendGroupId);
+
+        if (! $friendGroupInfo) {
+            throw new ApiException(ErrorCode::FRIEND_GROUP_NOT_FOUND);
+        }
+
+        $result = UserService::createUserApplication($userId, $receiverId, $friendGroupId, UserApplication::APPLICATION_TYPE_FRIEND, $applicationReason, UserApplication::APPLICATION_STATUS_CREATE, UserApplication::UN_READ);
+        if (! $result) {
+            throw new ApiException(ErrorCode::USER_CREATE_APPLICATION_FAIL);
+        }
+
+//        $fd = TableManager::get(MemoryTable::USER_TO_FD)->get((string) $receiverId, 'fd') ?? '';
+//        if ($fd) {
+//            $task = ApplicationContext::getContainer()->get(UserTask::class);
+//            $task->unReadApplicationCount($fd, '新');
+//        }
+        return $result;
     }
 }

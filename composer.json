@@ -32,6 +32,7 @@
         "hyperf/validation": "*",
         "hyperf/view": "^3.0",
         "hyperf/view-engine": "*",
+        "hyperf/websocket-server": "*",
         "phper666/jwt-auth": "^4.0"
     },
     "require-dev": {

@@ -15,6 +15,7 @@ namespace App\Service;
 use App\Constants\ErrorCode;
 use App\Exception\ApiException;
 use App\Model\User;
+use App\Model\UserApplication;
 use App\Model\UserLoginLog;
 
 use function App\Helper\getClientIp;
@@ -91,5 +92,28 @@ class UserService
             'sign' => $userInfo->sign,
             'avatar' => $userInfo->avatar,
         ];
+    }
+
+    /**
+     * @return int
+     */
+    public static function createUserApplication(
+        int $userId,
+        int $receiverId,
+        int $groupId,
+        string $applicationType,
+        string $applicationReason,
+        int $applicationStatus = UserApplication::APPLICATION_STATUS_CREATE,
+        int $readState = UserApplication::UN_READ
+    ) {
+        return UserApplication::query()->insertGetId([
+            'uid' => $userId,
+            'receiver_id' => $receiverId,
+            'group_id' => $groupId,
+            'application_type' => $applicationType,
+            'application_status' => $applicationStatus,
+            'application_reason' => $applicationReason,
+            'read_state' => $readState,
+        ]);
     }
 }
