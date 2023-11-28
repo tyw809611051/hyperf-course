@@ -40,7 +40,7 @@ class GroupController extends CommonController
     public function getRecommendedGroup()
     {
         try {
-            return $this->response->success(GroupService::getRecommendedGroup(20));
+            return $this->resp->success(GroupService::getRecommendedGroup(20));
         } catch (\Throwable $throwable) {
             return $this->resp->error($throwable->getCode(), $throwable->getMessage());
         }
