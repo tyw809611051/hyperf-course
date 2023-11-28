@@ -172,7 +172,7 @@
         submit: function(group, remark, index){
           postRequest(friend_apply, {
             receiver_id: receiver_id,
-            friend_group_id: group,
+            friend_group_id: 1,
             application_reason: remark
           }, function(data){
             layer.close(index);
