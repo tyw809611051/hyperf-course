@@ -14,6 +14,7 @@ namespace App\Controller\Http;
 
 use App\Exception\ApiException;
 use Hyperf\HttpServer\Annotation\AutoController;
+use Hyperf\HttpServer\Annotation\RequestMapping;
 use Throwable;
 
 #[AutoController(prefix: 'util')]
