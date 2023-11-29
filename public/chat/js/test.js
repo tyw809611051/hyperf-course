@@ -2,7 +2,7 @@ import {
     user_init, static_user_application, static_user_chat_history, group_get_relation, util_upload_img, util_upload_file
 } from "./api.js";
 import {getCookie} from "./util.js";
-import {ready, toMessage, toolCode, userSign, userStatus, videoRoom} from "./event";
+import {ready, toMessage, toolCode, userSign, userStatus, videoRoom} from "./event.js";
 //以下为 layim 最新版写法
 layui.config({
     layimPath: '../../dist/' //配置 layim.js 所在目录
