@@ -15,7 +15,12 @@ var messageList = {};
 
 function createSocketConnection(url, protocols) {
   output(url, 'createSocketConnection');
-  Im = new WebSocket(url,[protocols]);
+  try {
+    Im = new WebSocket(url,[protocols]);
+  } catch (e) {
+    console.log(66666,e)
+  }
+
   return Im;
 }
 
