@@ -15,7 +15,7 @@ var messageList = {};
 
 function createSocketConnection(url, protocols) {
   output(url, 'createSocketConnection');
-  Im = new WebSocket(url);
+  Im = new WebSocket(url,[protocols]);
   return Im;
 }
 
