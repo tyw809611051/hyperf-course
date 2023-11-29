@@ -30,6 +30,18 @@ return [
                 'enable_request_lifecycle' => false,
             ],
         ],
+        [
+            'name' => 'ws',
+            'type' => Server::SERVER_WEBSOCKET,
+            'host' => '0.0.0.0',
+            'port' => 9502,
+            'sock_type' => SWOOLE_SOCK_TCP,
+            'callbacks' => [
+                Event::ON_HAND_SHAKE => [Hyperf\WebSocketServer\Server::class, 'onHandShake'],
+                Event::ON_MESSAGE => [Hyperf\WebSocketServer\Server::class, 'onMessage'],
+                Event::ON_CLOSE => [Hyperf\WebSocketServer\Server::class, 'onClose'],
+            ],
+        ],
     ],
     'settings' => [
         Constant::OPTION_ENABLE_COROUTINE => true,
@@ -43,7 +55,7 @@ return [
         Constant::OPTION_BUFFER_OUTPUT_SIZE => 2 * 1024 * 1024,
 
         // 静态资源
-        'document_root'         => BASE_PATH . '/public/',
+        'document_root' => BASE_PATH . '/public/',
         'enable_static_handler' => true,
         // Task Worker 数量，根据您的服务器配置而配置适当的数量
         'task_worker_num' => swoole_cpu_num(),
@@ -59,7 +71,7 @@ return [
         Event::ON_TASK => [Hyperf\Framework\Bootstrap\TaskCallback::class, 'onTask'],
         Event::ON_FINISH => [Hyperf\Framework\Bootstrap\FinishCallback::class, 'onFinish'],
         // Task callbacks
-//        SwooleEvent::ON_TASK         => [Hyperf\Framework\Bootstrap\TaskCallback::class, 'onTask'],
-//        SwooleEvent::ON_FINISH       => [Hyperf\Framework\Bootstrap\FinishCallback::class, 'onFinish'],
+        //        SwooleEvent::ON_TASK         => [Hyperf\Framework\Bootstrap\TaskCallback::class, 'onTask'],
+        //        SwooleEvent::ON_FINISH       => [Hyperf\Framework\Bootstrap\FinishCallback::class, 'onFinish'],
     ],
 ];
