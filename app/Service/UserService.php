@@ -116,4 +116,14 @@ class UserService
             'read_state' => $readState,
         ]);
     }
+
+    public static function findUserInfoById(int $uid)
+    {
+        $userInfo = User::query()->whereNull('deleted_at')->where(['id' => $uid])->first();
+        if (!$userInfo) {
+            throw new ApiException(ErrorCode::USER_NOT_FOUND);
+        }
+
+        return $userInfo;
+    }
 }

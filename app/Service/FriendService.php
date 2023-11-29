@@ -15,6 +15,7 @@ namespace App\Service;
 use App\Constants\ErrorCode;
 use App\Constants\MemoryTable;
 use App\Exception\ApiException;
+use App\Model\FriendChatHistory;
 use App\Model\FriendGroup;
 use App\Model\FriendRelation;
 use App\Model\Group;
@@ -154,11 +155,29 @@ class FriendService
             throw new ApiException(ErrorCode::USER_CREATE_APPLICATION_FAIL);
         }
 
-//        $fd = TableManager::get(MemoryTable::USER_TO_FD)->get((string) $receiverId, 'fd') ?? '';
-//        if ($fd) {
-//            $task = ApplicationContext::getContainer()->get(UserTask::class);
-//            $task->unReadApplicationCount($fd, '新');
-//        }
+        //        $fd = TableManager::get(MemoryTable::USER_TO_FD)->get((string) $receiverId, 'fd') ?? '';
+        //        if ($fd) {
+        //            $task = ApplicationContext::getContainer()->get(UserTask::class);
+        //            $task->unReadApplicationCount($fd, '新');
+        //        }
         return $result;
+    }
+
+    public static function createFriendChatHistory(
+        string $messageId,
+        int $fromUserId,
+        int $toUserId,
+        string $content,
+        int $receptionState = FriendChatHistory::NOT_RECEIVED
+    ) {
+        $data = [
+            'message_id' => $messageId,
+            'from_uid' => $fromUserId,
+            'to_uid' => $toUserId,
+            'content' => $content,
+            'reception_state' => $receptionState,
+        ];
+        $id = FriendChatHistory::query()->insertGetId($data);
+        return FriendChatHistory::query()->whereNull('deleted_at')->where(['id' => $id])->first();
     }
 }
