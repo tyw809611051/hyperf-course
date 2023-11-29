@@ -58,7 +58,7 @@ return [
         'document_root' => BASE_PATH . '/public/',
         'enable_static_handler' => true,
         // Task Worker 数量，根据您的服务器配置而配置适当的数量
-        'task_worker_num' => swoole_cpu_num(),
+        'task_worker_num' => 1,
         // 因为 `Task` 主要处理无法协程化的方法，所以这里推荐设为 `false`，避免协程下出现数据混淆的情况
         'task_enable_coroutine' => false,
     ],
@@ -70,8 +70,6 @@ return [
         // Task callbacks
         Event::ON_TASK => [Hyperf\Framework\Bootstrap\TaskCallback::class, 'onTask'],
         Event::ON_FINISH => [Hyperf\Framework\Bootstrap\FinishCallback::class, 'onFinish'],
-        // Task callbacks
-        //        SwooleEvent::ON_TASK         => [Hyperf\Framework\Bootstrap\TaskCallback::class, 'onTask'],
-        //        SwooleEvent::ON_FINISH       => [Hyperf\Framework\Bootstrap\FinishCallback::class, 'onFinish'],
+        Event::ON_SHUTDOWN => [Hyperf\Framework\Bootstrap\ShutdownCallback::class, 'onShutdown'],
     ],
 ];

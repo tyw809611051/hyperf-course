@@ -16,6 +16,6 @@ use Hyperf\HttpServer\Router\Router;
 Router::addRoute(['GET', 'POST', 'HEAD'], '/', 'App\Controller\Http\HomeController@index');
 
 Router::addServer('ws', function () {
-    Router::get('/ws', 'App\Controller\Ws\WebSocketController');
+    Router::get('/im', 'App\Controller\Ws\WebSocketController');
     Router::get('/video', 'App\Controller\Ws\VideoController');
 });
