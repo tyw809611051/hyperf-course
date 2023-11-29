@@ -85,6 +85,7 @@ function infoInit() {
 }
 
 function wsReceive(event) {
+  output(event.data, 'event.data');
   let result = eval('(' + event.data + ')');
   output(result, 'onMessage');
   if (layui.jquery.isEmptyObject(result)) {
