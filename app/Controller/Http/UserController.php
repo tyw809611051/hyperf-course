@@ -168,7 +168,7 @@ class UserController extends CommonController
     {
         $user = $this->request->getAttribute('user');
         $page = $this->request->input('page');
-        $size = $this->request->input('size');
+        $size = $this->request->input('size',10);
         $result = UserService::applyList($user->id, (int) $page, (int) $size);
         return $this->resp->success($result);
     }
