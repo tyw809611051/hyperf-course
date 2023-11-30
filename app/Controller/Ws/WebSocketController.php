@@ -66,7 +66,8 @@ class WebSocketController extends AbstractController implements OnMessageInterfa
                     'data' => $result,
                     'ext' => [],
                 ];
-                $this->sender->push($frame->fd, MessageParser::encode($receive));
+//                $this->sender->push($frame->fd, MessageParser::encode($receive));
+                $server->push($frame->fd, MessageParser::encode($receive));
             }
         }
         var_dump('onMessage', $frame->data);
