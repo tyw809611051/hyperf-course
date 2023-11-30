@@ -12,11 +12,16 @@ declare(strict_types=1);
 
 namespace App\Controller\Ws;
 
+use App\Component\MessageParser;
+use App\Component\WsProtocol;
 use App\Controller\AbstractController;
+use Hyperf\Context\Context;
 use Hyperf\Contract\OnCloseInterface;
 use Hyperf\Contract\OnMessageInterface;
 use Hyperf\Contract\OnOpenInterface;
 use Hyperf\Engine\WebSocket\Opcode;
+use Hyperf\HttpServer\Router\Dispatched;
+use Hyperf\HttpServer\Router\DispatcherFactory;
 
 class WebSocketController extends AbstractController implements OnMessageInterface, OnOpenInterface, OnCloseInterface
 {
@@ -27,7 +32,38 @@ class WebSocketController extends AbstractController implements OnMessageInterfa
             $server->push('', Opcode::PONG);
             return;
         }
-        $server->push($frame->fd, 'Recv: ' . $frame->data);
+        //        $server->push($frame->fd, 'Recv: ' . $frame->data);
+        // 处理消息
+        $message = MessageParser::decode($frame->data);
+        Context::set('request', new WsProtocol(
+            $message['data'],
+            $message['ext'],
+            $frame->fd,
+            $server->getClientInfo($frame->fd)['last_time'] ?? 0
+        ));
+        $dispatcher = $this->container
+            ->get(DispatcherFactory::class)
+            ->getDispatcher('ws');
+        $controller = explode('.', $message['cmd'])[0] ?? '';
+        $method = explode('.', $message['cmd'])[1] ?? '';
+        $dispatched = make(Dispatched::class, [
+            $dispatcher->dispatch('GET', sprintf('/%s/%s', $controller, $method)),
+        ]);
+        if ($dispatched->isFound()) {
+            // 路由处理
+            $result = call_user_func([
+                make($dispatched->handler->callback[0]),
+                $dispatched->handler->callback[1],
+            ]);
+            if ($result !== null) {
+                $receive = [
+                    'cmd' => $message['cmd'],
+                    'data' => $result,
+                    'ext' => [],
+                ];
+                $this->sender->push($frame->fd, MessageParser::encode($receive));
+            }
+        }
         var_dump('onMessage', $frame->data);
     }
 
