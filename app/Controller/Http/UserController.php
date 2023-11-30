@@ -180,7 +180,7 @@ class UserController extends CommonController
         $uid = $this->request->input('uid'); // 对方用户ID
         $fromGroup = $this->request->input('from_group'); // 对方设定的好友分组
         $group = $this->request->input('group'); // 我设定的好友分组
-        $result = UserService::agreeFriend($id, $group);
+        $result = UserService::agreeFriend(intval($id), intval($group));
         return $this->resp->success($result);
     }
 
@@ -188,7 +188,7 @@ class UserController extends CommonController
     public function refuseFriend()
     {
         $id = $this->request->input('id');
-        $result = UserService::refuseFriend($id);
+        $result = UserService::refuseFriend(intval($id));
         return $this->resp->success($result);
     }
 }
