@@ -155,11 +155,11 @@ class FriendService
             throw new ApiException(ErrorCode::USER_CREATE_APPLICATION_FAIL);
         }
 
-        //        $fd = TableManager::get(MemoryTable::USER_TO_FD)->get((string) $receiverId, 'fd') ?? '';
-        //        if ($fd) {
-        //            $task = ApplicationContext::getContainer()->get(UserTask::class);
-        //            $task->unReadApplicationCount($fd, '新');
-        //        }
+        $fd = TableManager::get(MemoryTable::USER_TO_FD)->get((string) $receiverId, 'fd') ?? '';
+        if ($fd) {
+            $task = ApplicationContext::getContainer()->get(UserTask::class);
+            $task->unReadApplicationCount($fd, '新');
+        }
         return $result;
     }
 
@@ -179,5 +179,33 @@ class FriendService
         ];
         $id = FriendChatHistory::query()->insertGetId($data);
         return FriendChatHistory::query()->whereNull('deleted_at')->where(['id' => $id])->first();
+    }
+
+    public static function getUnreadMessageByToUserId(int $uid)
+    {
+        $historyInfos = FriendChatHistory::query()->whereNull('deleted_at')->where(['to_uid' => $uid])->where('reception_state', '=', FriendChatHistory::NOT_RECEIVED)->get()->toArray();
+
+        $userIds = [$uid];
+
+        foreach ($historyInfos as $historyInfo) {
+            array_push($userIds, $historyInfo['from_uid']);
+        }
+
+        $userInfos = array_column(UserService::getUserByIds($userIds), null, 'id');
+
+        $result = [];
+
+        foreach ($historyInfos as $historyInfo) {
+            $fromUserId = $historyInfo['from_uid'];
+            $result[] = [
+                'username' => $userInfos[$fromUserId]['username'],
+                'avatar' => $userInfos[$fromUserId]['avatar'],
+                'from_uid' => $fromUserId,
+                'content' => $historyInfo['content'],
+                'message_id' => $historyInfo['message_id'],
+                'timestamp' => strtotime($historyInfo['created_at']) * 1000,
+            ];
+        }
+        return $result;
     }
 }

@@ -1,14 +1,15 @@
 <?php
-declare(strict_types = 1);
 
+declare(strict_types=1);
 /**
  * This file is part of Hyperf.
  *
  * @link     https://www.hyperf.io
- * @document https://doc.hyperf.io
+ * @document https://hyperf.wiki
  * @contact  group@hyperf.io
- * @license  https://github.com/hyperf-cloud/hyperf/blob/master/LICENSE
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
+
 namespace App\Controller\Ws;
 
 use App\Component\WsProtocol;
@@ -23,11 +24,10 @@ use Hyperf\HttpServer\Annotation\AutoController;
 use Hyperf\HttpServer\Annotation\RequestMapping;
 use Hyperf\Memory\TableManager;
 
-
-#[AutoController(prefix: "friend",server: "ws")]
+#[AutoController(prefix: 'friend', server: 'ws')]
 class FriendController extends AbstractController
 {
-    #[RequestMapping(path: "sendMessage",methods: "GET")]
+    #[RequestMapping(path: 'sendMessage', methods: 'GET')]
     public function sendMessage()
     {
         /**
@@ -39,7 +39,7 @@ class FriendController extends AbstractController
         $friendChatHistoryInfo = FriendService::createFriendChatHistory($data['message_id'], $data['from_user_id'], $data['to_id'], $data['content']);
         $userInfo = UserService::findUserInfoById($data['from_user_id']);
 
-        $fd = TableManager::get(MemoryTable::USER_TO_FD)->get($data['to_id'],'fd') ?? '';
+        $fd = TableManager::get(MemoryTable::USER_TO_FD)->get($data['to_id'], 'fd') ?? '';
         $this->container->get(FriendTask::class)->sendMessage(
             $fd,
             $userInfo->username,
@@ -54,5 +54,32 @@ class FriendController extends AbstractController
         );
 
         return ['message_id' => $data['message_id'] ?? ''];
+    }
+
+    #[RequestMapping(path: 'getUnreadMessage', methods: 'GET')]
+    public function getUnreadMessage()
+    {
+        /**
+         * @var WsProtocol $request
+         * */
+        $request = Context::get('request');
+        $fd = $request->getFd();
+
+        $userId = TableManager::get(MemoryTable::FD_TO_USER)->get((string) $fd, 'userId') ?? '';
+        $messages = FriendService::getUnreadMessageByToUserId((int) $userId);
+        foreach ($messages as $message) {
+            $this->container->get(FriendTask::class)->sendMessage(
+                $fd,
+                $message['username'],
+                $message['avatar'],
+                $message['from_uid'],
+                UserApplication::APPLICATION_TYPE_FRIEND,
+                $message['content'],
+                $message['message_id'],
+                false,
+                $message['from_uid'],
+                $message['timestamp']
+            );
+        }
     }
 }

@@ -126,4 +126,13 @@ class UserService
 
         return $userInfo;
     }
+
+    public static function getUnreadApplicationCount(int $uid)
+    {
+        return UserApplication::query()
+            ->whereNull('deleted_at')
+            ->where('read_state', 'eq', userApplication::UN_READ)
+            ->where('receiver_id', '=', $uid)
+            ->count('id');
+    }
 }
