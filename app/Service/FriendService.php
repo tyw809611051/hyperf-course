@@ -155,6 +155,7 @@ class FriendService
             throw new ApiException(ErrorCode::USER_CREATE_APPLICATION_FAIL);
         }
 
+        TableManager::initialize(MemoryTable::USER_TO_FD,1024 * 5);
         $fd = TableManager::get(MemoryTable::USER_TO_FD)->get((string) $receiverId, 'fd') ?? '';
         if ($fd) {
             $task = ApplicationContext::getContainer()->get(UserTask::class);
