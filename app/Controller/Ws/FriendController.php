@@ -35,13 +35,12 @@ class FriendController extends AbstractController
          */
         $protocol = Context::get('request');
         $data = $protocol->getData();
-        var_dump('sendMsg',$data);
 
         $friendChatHistoryInfo = FriendService::createFriendChatHistory($data['message_id'], $data['from_user_id'], $data['to_id'], $data['content']);
         $userInfo = UserService::findUserInfoById($data['from_user_id']);
-        var_dump('sendMsg2',$userInfo);
-        $fd = TableManager::get(MemoryTable::USER_TO_FD)->get($data['to_id'], 'fd') ?? '';
-        var_dump('sendMsg3',$fd);
+
+        $fd = TableManager::get(MemoryTable::USER_TO_FD)->get(strval($data['to_id']), 'fd') ?? '';
+
         $this->container->get(FriendTask::class)->sendMessage(
             $fd,
             $userInfo->username,
