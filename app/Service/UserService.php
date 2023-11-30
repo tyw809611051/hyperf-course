@@ -14,6 +14,7 @@ namespace App\Service;
 
 use App\Constants\ErrorCode;
 use App\Exception\ApiException;
+use App\Model\FriendRelation;
 use App\Model\User;
 use App\Model\UserApplication;
 use App\Model\UserLoginLog;
@@ -207,8 +208,50 @@ class UserService
                 'time' => $time,
                 'user' => $user,
             ];
-
         }
         return $rtList;
+    }
+
+    public static function agreeFriend(int $id, int $group)
+    {
+        $userApply = UserApplication::find($id);
+        if (! $userApply) {
+            throw new ApiException(ErrorCode::USER_APPLICATION_NOT_FOUND);
+        }
+
+        if ($userApply['application_status'] != UserApplication::APPLICATION_STATUS_CREATE) {
+            throw new ApiException(ErrorCode::USER_APPLICATION_PROCESSED);
+        }
+        // 添加好友
+        FriendRelation::create([
+            'uid' => $userApply['uid'],
+            'friend_id' => $userApply['receiver_id'],
+            'friend_group_id' => $userApply['group_id'],
+        ]);
+        FriendRelation::create([
+            'uid' => $userApply['receiver_id'],
+            'friend_id' => $userApply['uid'],
+            'friend_group_id' => $group,
+        ]);
+
+        // 更改信息状态
+        $rs = $userApply::where(['id' => $id])->update(['application_status' => UserApplication::APPLICATION_STATUS_ACCEPT, 'read_state' => UserApplication::ALREADY_READ]);
+        return $rs;
+    }
+
+    public static function refuseFriend(int $id)
+    {
+        $userApply = UserApplication::find($id);
+        if (! $userApply) {
+            throw new ApiException(ErrorCode::USER_APPLICATION_NOT_FOUND);
+        }
+
+        if ($userApply['application_status'] != UserApplication::APPLICATION_STATUS_CREATE) {
+            throw new ApiException(ErrorCode::USER_APPLICATION_PROCESSED);
+        }
+
+        // 更改信息状态
+        $rs = $userApply::where(['id' => $id])->update(['application_status' => UserApplication::APPLICATION_STATUS_REFUSE, 'read_state' => UserApplication::ALREADY_READ]);
+        return $rs;
     }
 }

@@ -172,4 +172,23 @@ class UserController extends CommonController
         $result = UserService::applyList($user->id, (int) $page, (int) $size);
         return $this->resp->success($result);
     }
+
+    #[RequestMapping(path: 'agreeFriend', methods: 'POST')]
+    public function agreeFriend()
+    {
+        $id = $this->request->input('id');
+        $uid = $this->request->input('uid'); // 对方用户ID
+        $fromGroup = $this->request->input('from_group'); // 对方设定的好友分组
+        $group = $this->request->input('group'); // 我设定的好友分组
+        $result = UserService::agreeFriend($id, $group);
+        return $this->resp->success($result);
+    }
+
+    #[RequestMapping(path: 'refuseFriend', methods: 'POST')]
+    public function refuseFriend()
+    {
+        $id = $this->request->input('id');
+        $result = UserService::refuseFriend($id);
+        return $this->resp->success($result);
+    }
 }
