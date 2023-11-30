@@ -23,11 +23,12 @@ use Hyperf\Engine\WebSocket\Opcode;
 use Hyperf\HttpServer\Router\Dispatched;
 use Hyperf\HttpServer\Router\DispatcherFactory;
 use Hyperf\Di\Annotation\Inject;
+use Hyperf\WebSocketServer\Sender;
 
 class WebSocketController extends AbstractController implements OnMessageInterface, OnOpenInterface, OnCloseInterface
 {
     #[Inject]
-    protected Hyperf\WebSocketServer\Sender $sender;
+    protected $sender;
 
     public function onMessage($server, $frame): void
     {
