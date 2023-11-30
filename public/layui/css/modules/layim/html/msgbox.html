@@ -81,7 +81,7 @@ layui.use(['layim', 'flow'], function(){
     
     //实际部署时，请将下述 getmsg.json 改为你的接口地址
     
-    $.get('getmsg.json', {
+    $.get('/user/applyList', {
       page: page || 1
     }, function(res){
       if(res.code != 0){

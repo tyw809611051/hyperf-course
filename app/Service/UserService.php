@@ -120,7 +120,7 @@ class UserService
     public static function findUserInfoById(int $uid)
     {
         $userInfo = User::query()->whereNull('deleted_at')->where(['id' => $uid])->first();
-        if (!$userInfo) {
+        if (! $userInfo) {
             throw new ApiException(ErrorCode::USER_NOT_FOUND);
         }
 
@@ -134,5 +134,80 @@ class UserService
             ->where('read_state', 'eq', userApplication::UN_READ)
             ->where('receiver_id', '=', $uid)
             ->count('id');
+    }
+
+    public static function applyList(int $uid, int $page, int $size)
+    {
+        $list = UserApplication::query()->whereNull('deleted_at')
+            ->where(['uid' => $uid])
+            ->orWhere(['receiver_id' => $uid])
+            ->orderBy('created_at', 'desc')
+            ->limit($size)->offset(($page - 1) * $size)
+            ->get()->toArray();
+        $rtList = [];
+        foreach ($list as $k => $item) {
+            $time = $item['created_at'];
+            switch ($item['application_type']) {
+                case UserApplication::APPLICATION_CREATE_USER:
+                    break;
+                case UserApplication::APPLICATION_RECEIVER_USER:
+                    break;
+                case UserApplication::APPLICATION_SYSTEM:
+                    break;
+                case UserApplication::APPLICATION_TYPE_FRIEND:
+                    $type = 1;
+                    switch ($item['application_status']) {
+                        case 0:
+                            if ($item['receiver_id'] == $uid) {
+                                $content = '申请加你好友';
+                                $from = $item['uid'];
+                                $fromGroup = $item['group_id'];
+                                $user = User::find($item['uid']);
+                                $remark = $item['application_reason'];
+                            } else {
+                                $content = UserApplication::APPLICATION_STATUS_TEXT[$item['application_status']]; // 等待验证
+                                $from = null;
+                                $fromGroup = null;
+                                $user = null;
+                            }
+                            break;
+                        case 2:
+                        case 1:
+                            if ($item['receiver_id'] == $uid) {
+                                $content = UserApplication::APPLICATION_STATUS_TEXT[$item['application_status']]; // 已同意
+                                $from = $item['uid'];
+                                $fromGroup = $item['group_id'];
+                                $user = User::find($item['uid']);
+                                $remark = $item['application_reason'];
+                            } else {
+                                $content = UserApplication::APPLICATION_STATUS_TEXT[$item['application_status']]; // 已同意
+                                $from = null;
+                                $fromGroup = null;
+                                $user = null;
+                            }
+                            break;
+                    }
+
+                    break;
+                case UserApplication::APPLICATION_TYPE_GROUP:
+                    break;
+            }
+
+            $rtList[] = [
+                'id' => $item['id'],
+                'content' => $content,
+                'uid' => $uid,
+                'from' => $from,
+                'from_group' => $fromGroup,
+                'type' => $type,
+                'remark' => $remark,
+                'href' => null,
+                'read' => $item['read_state'],
+                'time' => $time,
+                'user' => $user,
+            ];
+
+        }
+        return $rtList;
     }
 }

@@ -72,7 +72,7 @@ class UserController extends CommonController
             $token = $this->jwt->getToken('default', $auth);
 
             $cookie = new Cookie('IM_TOKEN', $token->toString(), $this->jwt->getTTL($token->toString()) * 1000, '/');
-            var_dump('login-token',$token->toString());
+            var_dump('login-token', $token->toString());
             return $this->resp->cookie($cookie)->success([
                 'token' => $token->toString(),
                 'exp' => $this->jwt->getTTL($token->toString()),
@@ -154,11 +154,22 @@ class UserController extends CommonController
         ]);
     }
 
-    #[RequestMapping(path: "signOut",methods: "GET")]
+    #[RequestMapping(path: 'signOut', methods: 'GET')]
     public function signOut()
     {
         $token = $this->request->getCookieParams()['IM_TOKEN'] ?? '';
         $this->jwt->logout($token);
         return $this->response->withCookie(new Cookie('IM_TOKEN', ''))->redirect(env('APP_URL') . '/index/login');
+    }
+
+    #[RequestMapping(path: 'applyList', methods: 'GET')]
+    #[Middleware(JwtAuthMiddleware::class)]
+    public function applyList()
+    {
+        $user = $this->request->getAttribute('user');
+        $page = $this->request->input('page');
+        $size = $this->request->input('size');
+        $result = UserService::applyList($user->id, (int) $page, (int) $size);
+        return $this->resp->success($result);
     }
 }
