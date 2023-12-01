@@ -60,6 +60,7 @@ class FriendTask
         $fromId,
         $timestamp
     ) {
+        var_dump('task sendMessage',$fd);
         if (! $fd) {
             return false;
         }
