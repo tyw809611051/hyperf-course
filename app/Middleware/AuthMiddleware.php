@@ -77,6 +77,7 @@ class AuthMiddleware implements MiddlewareInterface
         if ($isValidToken) {
             $request = $request->withAddedHeader('Authorization', 'Bearer ' . $token);
             $jwtData = JWTUtil::getParserData($request);
+            var_dump('auth middle',$jwtData);
             $user = User::query()->where(['id' => $jwtData['uid']])->first();
             if (empty($user)) {
                 throw new WsHandshakeException(ErrorCode::USER_NOT_FOUND);
@@ -95,10 +96,11 @@ class AuthMiddleware implements MiddlewareInterface
 //                $swResponse->header($key, $value);
 //            }
 //            $swResponse->header(Security::SEC_WEBSOCKET_PROTOCOL, $token);
-            return $response
-                ->withStatus(self::HANDLE_SUCCESS_CODE)
-//                ->setSwooleResponse($swResponse)
-                ->withAttribute('class', $controller);
+//            return $response
+//                ->withStatus(self::HANDLE_SUCCESS_CODE)
+////                ->setSwooleResponse($swResponse)
+//                ->withAttribute('class', $controller);
+            return $handler->handle($request);
         }
         return $response
             ->withStatus(self::HANDLE_FAIL_CODE);
