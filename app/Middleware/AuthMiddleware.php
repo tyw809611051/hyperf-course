@@ -88,16 +88,16 @@ class AuthMiddleware implements MiddlewareInterface
                 ->getDispatcher('ws');
             $routes = $dispatcher->dispatch($request->getMethod(), $uri->getPath());
             $controller = $routes[1]->callback;
-            $security = $container->get(Security::class);
-            $headers = $security->handShakeHeaders($key);
-            $swResponse = $response->getSwooleResponse();
-            foreach ($headers as $key => $value) {
-                $swResponse->header($key, $value);
-            }
-            $swResponse->header(Security::SEC_WEBSOCKET_PROTOCOL, $token);
+//            $security = $container->get(Security::class);
+//            $headers = $security->handShakeHeaders($key);
+//            $swResponse = $response->getSwooleResponse();
+//            foreach ($headers as $key => $value) {
+//                $swResponse->header($key, $value);
+//            }
+//            $swResponse->header(Security::SEC_WEBSOCKET_PROTOCOL, $token);
             return $response
                 ->withStatus(self::HANDLE_SUCCESS_CODE)
-                ->setSwooleResponse($swResponse)
+//                ->setSwooleResponse($swResponse)
                 ->withAttribute('class', $controller);
         }
         return $response
