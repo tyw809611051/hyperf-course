@@ -106,21 +106,21 @@ class WebSocketController extends AbstractController implements OnMessageInterfa
     public function onClose($server, int $fd, int $reactorId): void
     {
         // TODO: Implement onClose() method.
-        $userId = TableManager::get(MemoryTable::FD_TO_USER)->get((string) $fd, 'userId');
-        $selfFd = TableManager::get(MemoryTable::USER_TO_FD)->get((string) $userId, 'fd');
-
-        if ($fd == $selfFd) {
-            TableManager::get(MemoryTable::USER_TO_FD)->del((string) $userId);
-            TableManager::get(MemoryTable::FD_TO_USER)->del((string) $fd);
-        }
-
-        UserService::setUserStatus($userId, User::STATUS_OFFLINE);
-
-        $atomic = AtomicManager::get(Atomic::NAME);
-        $atomic->sub(1);
-
-        WsContext::destroy('user');
-        $this->container->get(UserTask::class)->onlineNumber();
+//        $userId = TableManager::get(MemoryTable::FD_TO_USER)->get((string) $fd, 'userId');
+//        $selfFd = TableManager::get(MemoryTable::USER_TO_FD)->get((string) $userId, 'fd');
+//
+//        if ($fd == $selfFd) {
+//            TableManager::get(MemoryTable::USER_TO_FD)->del((string) $userId);
+//            TableManager::get(MemoryTable::FD_TO_USER)->del((string) $fd);
+//        }
+//
+//        UserService::setUserStatus($userId, User::STATUS_OFFLINE);
+//
+//        $atomic = AtomicManager::get(Atomic::NAME);
+//        $atomic->sub(1);
+//
+//        WsContext::destroy('user');
+//        $this->container->get(UserTask::class)->onlineNumber();
         var_dump('onClose');
     }
 }
