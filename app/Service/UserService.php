@@ -13,11 +13,15 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Constants\ErrorCode;
+use App\Constants\MemoryTable;
 use App\Exception\ApiException;
 use App\Model\FriendRelation;
 use App\Model\User;
 use App\Model\UserApplication;
 use App\Model\UserLoginLog;
+use App\Task\UserTask;
+use Hyperf\Context\ApplicationContext;
+use Hyperf\Memory\TableManager;
 
 use function App\Helper\getClientIp;
 
@@ -235,8 +239,7 @@ class UserService
         ]);
 
         // 更改信息状态
-        $rs = $userApply::where(['id' => $id])->update(['application_status' => UserApplication::APPLICATION_STATUS_ACCEPT, 'read_state' => UserApplication::ALREADY_READ]);
-        return $rs;
+        return $userApply::where(['id' => $id])->update(['application_status' => UserApplication::APPLICATION_STATUS_ACCEPT, 'read_state' => UserApplication::ALREADY_READ]);
     }
 
     public static function refuseFriend(int $id)
@@ -251,7 +254,36 @@ class UserService
         }
 
         // 更改信息状态
-        $rs = $userApply::where(['id' => $id])->update(['application_status' => UserApplication::APPLICATION_STATUS_REFUSE, 'read_state' => UserApplication::ALREADY_READ]);
-        return $rs;
+        return $userApply::where(['id' => $id])->update(['application_status' => UserApplication::APPLICATION_STATUS_REFUSE, 'read_state' => UserApplication::ALREADY_READ]);
+    }
+
+    public static function changeUserInfoById(int $userId, array $data)
+    {
+        return User::query()->whereNull('deleted_at')->where(['id' => $userId])->update($data);
+    }
+
+    public static function setUserStatus(int $userId, int $status = User::STATUS_ONLINE)
+    {
+        self::changeUserInfoById($userId, [
+            'status' => $status,
+        ]);
+        $friendIds = FriendService::getFriendIdsByUserId($userId);
+        $friendIds = array_column($friendIds, 'friend_id');
+
+        $onlineFds = [];
+        foreach ($friendIds as $friendId) {
+            $fd = TableManager::get(MemoryTable::USER_TO_FD)->get((string) $friendId, 'fd');
+            $fd && array_push($onlineFds, $fd);
+        }
+
+        $result = [
+            'user_id' => $userId,
+            'status' => FriendRelation::STATUS_TEXT[$status],
+        ];
+
+        $task = ApplicationContext::getContainer()->get(UserTask::class);
+        $task->setUserStatus($onlineFds, $result);
+
+        return $result;
     }
 }
