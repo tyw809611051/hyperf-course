@@ -75,6 +75,6 @@ class FriendTask
             'timestamp' => $timestamp,
         ];
         $result = wsSuccess(WsMessage::WS_MESSAGE_CMD_EVENT, WsMessage::EVENT_GET_MESSAGE, $data);
-        $this->sender->push($fd, $result);
+        var_dump('task result', $this->sender->push($fd, $result));
     }
 }
