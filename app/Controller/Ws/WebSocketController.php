@@ -34,39 +34,39 @@ class WebSocketController extends AbstractController implements OnMessageInterfa
             $server->push('', Opcode::PONG);
             return;
         }
-        //        $server->push($frame->fd, 'Recv: ' . $frame->data);
+        $server->push($frame->fd, 'Recv: ' . $frame->data);
         // 处理消息
-        $message = MessageParser::decode($frame->data);
-        Context::set('request', new WsProtocol(
-            $message['data'],
-            $message['ext'],
-            $frame->fd,
-            $server->getClientInfo($frame->fd)['last_time'] ?? 0
-        ));
-        $dispatcher = $this->container
-            ->get(DispatcherFactory::class)
-            ->getDispatcher('ws');
-        $controller = explode('.', $message['cmd'])[0] ?? '';
-        $method = explode('.', $message['cmd'])[1] ?? '';
-        $dispatched = make(Dispatched::class, [
-            $dispatcher->dispatch('GET', sprintf('/%s/%s', $controller, $method)),
-        ]);
-        if ($dispatched->isFound()) {
-            // 路由处理
-            $result = call_user_func([
-                make($dispatched->handler->callback[0]),
-                $dispatched->handler->callback[1],
-            ]);
-            if ($result !== null) {
-                $receive = [
-                    'cmd' => $message['cmd'],
-                    'data' => $result,
-                    'ext' => [],
-                ];
-                //                $this->sender->push($frame->fd, MessageParser::encode($receive));
-                $server->push($frame->fd, MessageParser::encode($receive));
-            }
-        }
+//        $message = MessageParser::decode($frame->data);
+//        Context::set('request', new WsProtocol(
+//            $message['data'],
+//            $message['ext'],
+//            $frame->fd,
+//            $server->getClientInfo($frame->fd)['last_time'] ?? 0
+//        ));
+//        $dispatcher = $this->container
+//            ->get(DispatcherFactory::class)
+//            ->getDispatcher('ws');
+//        $controller = explode('.', $message['cmd'])[0] ?? '';
+//        $method = explode('.', $message['cmd'])[1] ?? '';
+//        $dispatched = make(Dispatched::class, [
+//            $dispatcher->dispatch('GET', sprintf('/%s/%s', $controller, $method)),
+//        ]);
+//        if ($dispatched->isFound()) {
+//            // 路由处理
+//            $result = call_user_func([
+//                make($dispatched->handler->callback[0]),
+//                $dispatched->handler->callback[1],
+//            ]);
+//            if ($result !== null) {
+//                $receive = [
+//                    'cmd' => $message['cmd'],
+//                    'data' => $result,
+//                    'ext' => [],
+//                ];
+//                //                $this->sender->push($frame->fd, MessageParser::encode($receive));
+//                $server->push($frame->fd, MessageParser::encode($receive));
+//            }
+//        }
         var_dump('onMessage', $frame->data);
     }
 
