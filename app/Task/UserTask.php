@@ -13,9 +13,14 @@ declare(strict_types=1);
 namespace App\Task;
 
 use App\Component\Server;
+use App\Constants\Atomic;
+use App\Constants\MemoryTable;
 use App\Constants\WsMessage;
+use Hyperf\Memory\AtomicManager;
+use Hyperf\Memory\TableManager;
 use Hyperf\WebSocketServer\Sender;
 
+use Swoole\Table;
 use function App\Helper\wsSuccess;
 
 class UserTask
@@ -35,5 +40,25 @@ class UserTask
         $result = wsSuccess(WsMessage::WS_MESSAGE_CMD_EVENT, WsMessage::EVENT_USER_STATUS, $data);
         Server::sendToAll($result, $fds);
         return true;
+    }
+
+    public function onlineNumber()
+    {
+        $atomic = AtomicManager::get(Atomic::NAME);
+
+        $userToFdTable = TableManager::get(MemoryTable::USER_TO_FD);
+
+        $fds = [];
+        foreach ($userToFdTable as $item) {
+            array_push($fds, $item['fd']);
+        }
+
+        $data = wsSuccess(
+            WsMessage::WS_MESSAGE_CMD_EVENT,
+            'onlineNumber',
+            "<span>当前在线人数：<b>{$atomic->get()}</b></span>"
+        );
+
+        Server::sendToAll($data, $fds);
     }
 }
