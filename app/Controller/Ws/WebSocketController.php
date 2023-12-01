@@ -14,12 +14,7 @@ namespace App\Controller\Ws;
 
 use App\Component\MessageParser;
 use App\Component\WsProtocol;
-use App\Constants\Atomic;
-use App\Constants\MemoryTable;
 use App\Controller\AbstractController;
-use App\Model\User;
-use App\Service\UserService;
-use App\Task\UserTask;
 use Hyperf\Context\Context;
 use Hyperf\Contract\OnCloseInterface;
 use Hyperf\Contract\OnMessageInterface;
@@ -29,9 +24,6 @@ use Hyperf\Engine\WebSocket\Opcode;
 use Hyperf\Engine\WebSocket\Response;
 use Hyperf\HttpServer\Router\Dispatched;
 use Hyperf\HttpServer\Router\DispatcherFactory;
-use Hyperf\Memory\AtomicManager;
-use Hyperf\Memory\TableManager;
-use Hyperf\WebSocketServer\Context as WsContext;
 
 class WebSocketController extends AbstractController implements OnMessageInterface, OnOpenInterface, OnCloseInterface
 {
@@ -81,29 +73,13 @@ class WebSocketController extends AbstractController implements OnMessageInterfa
     public function onOpen($server, $request): void
     {
         // TODO: Implement onOpen() method.
-        $response = (new Response($server))->init($request);
-        $response->push(new Frame(payloadData: 'Opened'));
+        $server->push($request->fd, 'Opened');
         var_dump('onOpen');
     }
 
     public function onClose($server, int $fd, int $reactorId): void
     {
         // TODO: Implement onClose() method.
-        //        $userId = TableManager::get(MemoryTable::FD_TO_USER)->get((string) $fd, 'userId');
-        //        $selfFd = TableManager::get(MemoryTable::USER_TO_FD)->get((string) $userId, 'fd');
-        //
-        //        if ($fd == $selfFd) {
-        //            TableManager::get(MemoryTable::USER_TO_FD)->del((string) $userId);
-        //            TableManager::get(MemoryTable::FD_TO_USER)->del((string) $fd);
-        //        }
-        //
-        //        UserService::setUserStatus($userId, User::STATUS_OFFLINE);
-        //
-        //        $atomic = AtomicManager::get(Atomic::NAME);
-        //        $atomic->sub(1);
-        //
-        //        WsContext::destroy('user');
-        //        $this->container->get(UserTask::class)->onlineNumber();
         var_dump('onClose');
     }
 }
