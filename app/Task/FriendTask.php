@@ -20,7 +20,6 @@ use function App\Helper\wsSuccess;
 
 class FriendTask
 {
-
     #[Inject]
     protected \Hyperf\WebSocketServer\Sender $sender;
 
@@ -60,7 +59,7 @@ class FriendTask
         $fromId,
         $timestamp
     ) {
-        var_dump('task sendMessage',$fd);
+        var_dump('task sendMessage', $fd);
         if (! $fd) {
             return false;
         }

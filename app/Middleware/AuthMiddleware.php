@@ -77,21 +77,21 @@ class AuthMiddleware implements MiddlewareInterface
         if ($isValidToken) {
             $request = $request->withAddedHeader('Authorization', 'Bearer ' . $token);
             $jwtData = JWTUtil::getParserData($request);
-            var_dump('auth middle',$jwtData);
             $user = User::query()->where(['id' => $jwtData['uid']])->first();
             if (empty($user)) {
                 throw new WsHandshakeException(ErrorCode::USER_NOT_FOUND);
             }
             WsContext::set('user', $user);
-            $uri = $request->getUri();
-            $dispatcher = $container
-                ->get(DispatcherFactory::class)
-                ->getDispatcher('ws');
-            $routes = $dispatcher->dispatch($request->getMethod(), $uri->getPath());
-            $controller = $routes[1]->callback;
+//            $uri = $request->getUri();
+//            $dispatcher = $container
+//                ->get(DispatcherFactory::class)
+//                ->getDispatcher('ws');
+//            $routes = $dispatcher->dispatch($request->getMethod(), $uri->getPath());
+//            $controller = $routes[1]->callback;
 //            $security = $container->get(Security::class);
 //            $headers = $security->handShakeHeaders($key);
 //            $swResponse = $response->getSwooleResponse();
+
 //            foreach ($headers as $key => $value) {
 //                $swResponse->header($key, $value);
 //            }
@@ -100,6 +100,7 @@ class AuthMiddleware implements MiddlewareInterface
 //                ->withStatus(self::HANDLE_SUCCESS_CODE)
 ////                ->setSwooleResponse($swResponse)
 //                ->withAttribute('class', $controller);
+
             return $handler->handle($request);
         }
         return $response
