@@ -14,7 +14,9 @@ namespace App\Controller\Ws;
 
 use App\Component\MessageParser;
 use App\Component\WsProtocol;
+use App\Constants\MemoryTable;
 use App\Controller\AbstractController;
+use App\Task\UserTask;
 use Hyperf\Context\Context;
 use Hyperf\Contract\OnCloseInterface;
 use Hyperf\Contract\OnMessageInterface;
@@ -22,6 +24,8 @@ use Hyperf\Contract\OnOpenInterface;
 use Hyperf\Engine\WebSocket\Opcode;
 use Hyperf\HttpServer\Router\Dispatched;
 use Hyperf\HttpServer\Router\DispatcherFactory;
+use Hyperf\Memory\TableManager;
+use Hyperf\WebSocketServer\Context as WsContext;
 
 class WebSocketController extends AbstractController implements OnMessageInterface, OnOpenInterface, OnCloseInterface
 {
@@ -71,7 +75,16 @@ class WebSocketController extends AbstractController implements OnMessageInterfa
     public function onOpen($server, $request): void
     {
         // TODO: Implement onOpen() method.
-        $server->push($request->fd, 'Opened');
+        /**
+         * @var \App\Model\User $user
+         */
+        $user        = WsContext::get('user');
+        TableManager::get(MemoryTable::FD_TO_USER)->set((string)$request->fd, ['userId' => $user->id]);
+        TableManager::get(MemoryTable::USER_TO_FD)->set((string)$user->id, ['fd' => $request->fd]);
+
+        $task = $this->container->get(UserTask::class);
+        $task->onlineNumber();
+//        $server->push($request->fd, 'Opened');
         var_dump('onOpen');
     }
 
